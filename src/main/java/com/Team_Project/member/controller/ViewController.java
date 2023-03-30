@@ -9,6 +9,6 @@ public class ViewController {
 	
 	@GetMapping("/signup")
 	public String view() {
-		return "sign";
+		return "member/sign";
 	}
 }

@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
     <title>일반 회원가입</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $("#check-email").click(function() {
@@ -12,7 +14,7 @@
                 $.ajax({
                     type : "POST",
                     url : "/check-email",
-                    data : {
+                    data : {	
                         "email" : email
                     },
                     success : function(result) {

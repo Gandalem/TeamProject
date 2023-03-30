@@ -25,12 +25,12 @@ public class MemberController {
 
     @GetMapping("/admin")
     public String adminSignupForm() {
-        return "admin_signup";
+        return "member/admin_signup";
     }
 
     @GetMapping("/user")
     public String userSignupForm() {
-        return "user_signup";
+        return "member/user_signup";
     }
 
     @PostMapping("/admin")
