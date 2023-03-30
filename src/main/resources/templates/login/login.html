@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Login page</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+
+	<link rel="stylesheet" type="text/css" href="login.css">
+
+</head>
+<body>
+	<h1> 로그인 페이지 </h1>
+
+   <div>
+    	
+    	<div class="login_div">
+    	<p class="p"><span class="ps">로그인</span></p>
+    	
+    		<form th:action=@{/login} method="post">
+				<div class=login_div1>
+				
+					<input type="text" name="email" id="email" class="form-control" placeholder="아이디를 입력해주세요. (이메일)">
+					<p th:if="${loginErrorMsg}" class="error" th:text="${loginErrorMsg}"></p>
+					<input type="text" name="password" id="password" class="form-control" placeholder="비밀번호를 입력해주세요.">
+					<div class="but">
+						<span><button type="submit" class="btn btn-secondary btn-xs">로그인</button></span>
+						<span><a id="member1" class="btn btn-secondary btn-xs" th:href="@{#}">회원가입</a></span>
+					</div>
+					
+				</div>
+			</form>
+			
+		</div>
+        
+    </div>
+    
+    
+</body>
+</html>
