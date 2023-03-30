@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<!-- 반응형 작동시킬려면 meta태그에 viewport가 있어야한다. -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0 ,shrink-to-fit=no">
+<title>회사</title>
+<link rel="stylesheet" type="text/css" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/clist.css}">
+</head>
+<body>
+	<!-- css 초기화 -->
+	
+	<div th:replace="~{fragment/header :: header}"></div>
+	
+	
+	<div layout:fragment="content"></div>
+	
+	<div th:replace="~{fragment/footer :: footer}"></div>
+	
+	<script th:src="@{http://code.jquery.com/jquery-latest.min.js}"></script>
+	<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script th:src="@{/js/clist.js}"></script>
+	<th:block layout:fragment="script"></th:block>
+	
+</body>
+</html>
