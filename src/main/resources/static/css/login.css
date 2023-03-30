@@ -1,0 +1,37 @@
+.login_div{
+	margin:0 auto;
+	width:60%;
+	padding:0 0 50px 0;
+}
+.p {
+	text-align:center;
+	
+	height:100px;
+}
+.ps{
+	line-height:100px;
+	font-size:28px;
+}
+
+.login_div1{
+	margin-top:50px;
+}
+
+.form-control{
+	border:2px solid black;
+	padding:10px 0 10px 0;
+	margin-top:30px;
+}
+.but{
+	margin-top:50px;
+}
+.but button{
+	width:49%;
+	margin:0 auto;
+}
+#member1 {
+	text-decoration-line:none;
+	color:white;
+	width:49%;
+	float:right;
+}

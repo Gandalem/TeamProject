@@ -1,0 +1,145 @@
+
+<html layout:decorate="~{layout}">
+<div layout:fragment="content">
+<h1>인덱스 페이지</h1>
+
+    <div class="index_outdiv">
+        <form>
+
+            <div class="index_div1">
+                <div class="index_div1_div1">
+                    <table class="table">
+                        <tr><th>부서명 : </th><td>부서부서</td></tr>
+                        <tr><th>회원명 : </th><td>김이박최정이름</td></tr>
+                    </table>
+                </div>
+                <div class="index_div1_div2" id="date5"></div>
+                <div class="index_div1_div3"><a href="/" class="index_div1_a">근무일지 등록</a></div>
+            </div>
+
+            <div class="index_div2">
+                <div class="index_div2_div1" id="sgw">출근 시간</div>
+                <div class="index_div2_div2" id="slw">-</div>
+
+                <button class="btn btn-success" id="gw">출근</button>
+                <button class="btn btn-secondary" id="lw">퇴근</button>
+            </div>
+
+     </form>
+    </div>
+
+    <script>
+        var date; 
+
+
+        // 현재시간 등록 스크립트
+        function nDate() { 
+            date = setInterval(function () { 
+                var today = "현재 시간 :  "; 
+                var newDate = new Date(); 
+
+                today += newDate.getFullYear() + "년 "; 
+               	today += ("0" + (newDate.getMonth() + 1)).slice(-2) + "월 ";
+                today += ("0" + newDate.getDate()).slice(-2) + "일 "; 
+            	today += (newDate.getHours() + "시 ");
+                today += (newDate.getMinutes() + "분 ");
+                today += (newDate.getSeconds() + "초")
+	                
+	            $("#date5").text(today); 
+            }, 1000); 
+        } 
+        
+        
+     	// 페이지 로드 후 퇴근 버튼 비활성화
+        $(document).ready(function() {
+            $("#lw").prop("disabled", true); 
+
+        });
+
+		// 출근 버튼 클릭시 현재 시간 함수 등록
+		$("#gw").click(function() {
+			
+			// 현재 시간을 저장
+			var startDate = new Date();
+			var startYear = startDate.getFullYear();
+			var startMonth = startDate.getMonth() + 1;
+			var startDay = startDate.getDate();
+			var startHour = startDate.getHours();
+			var startMinute = startDate.getMinutes();
+			var startSecond = startDate.getSeconds();
+			var startTime = startYear + "년 " + startMonth + '월 ' + startDay + '일 ' + startHour + '시 ' + startMinute + '분 ' + startSecond + '초';
+
+			
+			$(this).prop("disabled", true);    // 출근 버튼 비활성화
+			$("#lw").prop("disabled", false);  // 퇴근 버튼 활성화
+			
+			$.ajax({
+				type: "GET",
+				url: "/commute/start",
+				data: {
+					workStart: startTime
+				},
+				success: function(data) {
+					console.log(data);
+				},
+				error: function() {
+					console.log("에러 발생");
+				}
+			});
+			  
+		});
+		
+		
+		
+		
+		
+		
+		
+		
+
+		// 퇴근 버튼 클릭시 현재시간 함수 등록
+		$("#lw").click(function() {
+		  var endTime = new Date().toLocaleString();    // 현재 시간을 저장
+		  
+		  $(this).prop("disabled", true);   // 퇴근 버튼 비활성화
+		  $("#gw").prop("disabled", false); // 출근 버튼 활성화
+
+		  $.ajax({
+		    type: "GET",
+		    url: "/commute/end",
+		    data: {
+		      workEnd: endTime
+		    },
+		    success: function(data) {
+		      console.log(data);
+		    },
+		    error: function() {
+		      console.log("에러 발생");
+		    }
+		  });
+		});
+
+
+		
+		// db에 저장된 출,퇴근 시간을 가져와서 View에 찍기
+	    $(document).ready(function() {
+	        $.ajax({
+	            url: '/commute/vstart',
+	            type: 'GET',
+	            dataType: 'json',
+	            success: function(data) {
+	                var start = data.workStart;
+	                $('#sgw').html(start);
+	            },
+	            error: function(){
+	            	console.log("에러");
+	            }
+	        });
+	    });
+		
+		
+		
+
+    </script>
+</div>
+</html>
