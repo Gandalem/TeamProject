@@ -8,6 +8,8 @@
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
 
 	<link rel="stylesheet" type="text/css" href="/css/login.css">
+	
+
 
 </head>
 <body>
@@ -21,11 +23,13 @@
     		<form th:action=@{/login} method="post">
 				<div class=login_div1>
 				
+				
 					<input type="email" name="email" id="email" class="form-control" placeholder="아이디를 입력해주세요. (이메일)">
 					
 					<input type="password" name="password" id="password" class="form-control" placeholder="비밀번호를 입력해주세요.">
 					
-					<p th:if="${loginErrorMsg}" class="error" th:text="${loginErrorMsg}"></p>
+					
+					<p id="error-message" class="error" th:if="${loginErrorMsg}" th:text="${loginErrorMsg}"></p>
 					
 					
 					<div class="but">
@@ -40,6 +44,22 @@
         
     </div>
     
+
     
+    <script>
+    // 로그인페이지에서 값이 없을경우 출력
+	$(document).ready(function() {
+	    $("form").on("submit", function(event) {
+	        var email = $("#email").val();
+	        var password = $("#password").val();
+	        
+	        if (email.trim() === "" || password.trim() === "") {
+	            event.preventDefault();
+	            alert("이메일과 비밀번호를 입력해주세요.");
+	        }
+	    });
+	});
+	</script>
+
 </body>
 </html>

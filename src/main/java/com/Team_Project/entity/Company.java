@@ -42,6 +42,18 @@ public class Company extends BaseTimeEntity {
 	@OneToMany
 	private List<Department> departmentId;
 	
+	public Company() {
+	    // default constructor
+	}
+	
+	public Company(Long id) {
+		this.id = id;
+	}
+	
+	public Company(String id) {
+		this.id = Long.parseLong(id);
+	}
+	
 	 public void addDepartment(Department department) {
 	        if (this.departmentId == null) {
 	            this.departmentId = new ArrayList<>();
