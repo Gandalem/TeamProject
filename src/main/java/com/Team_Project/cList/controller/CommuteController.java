@@ -34,25 +34,25 @@ public class CommuteController {
 	public void saveWorkEnd(@RequestParam(name = "workEnd") String workEnd) {
 	    commuteService.saveWorkEnd(workEnd);
 	}
-
 	
-	
-	
-	
-	
-	
-	// DB의 출근시간 보내기
-	@GetMapping(value = "/commute/vstart", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public Commute getsLatestCommute() {
-	    return commuteRepository.findFirstByOrderByIdxDesc();
-	}
+    // DB의 출근시간 보내기
+    @GetMapping(value = "/commute/vstart", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String getsLatestCommute() {
+        Commute commute = commuteRepository.findFirstByOrderByIdxDesc();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H시 m분 s초");
+        String formattedWorkStart = commute.getWorkStart().format(formatter);
+        return formattedWorkStart;
+    }
 	
 	// DB의 퇴근시간 보내기
 	@GetMapping(value = "/commute/vend", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public Commute geteLatestCommute() {
-	    return commuteRepository.findFirstByOrderByIdxDesc();
+	public String geteLatestCommute() {
+		Commute commute = commuteRepository.findFirstByOrderByIdxDesc();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H시 m분 s초");
+		String formattedWorkEnd = commute.getWorkEnd().format(formatter);
+		return formattedWorkEnd;
 	}
 	
 	

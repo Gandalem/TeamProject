@@ -37,6 +37,9 @@
 		var token = $("meta[name='_csrf']").attr("content");
 	    var header = $("meta[name='_csrf_header']").attr("content");
 
+
+
+
 		// 입력값이 빈 경우 알림창 띄우기
 		if (cname.length === 0 || address.length === 0 || cnumber.length === 0 || number.length === 0) {
 			alert('데이터를 입력하셔야 합니다.');
@@ -44,6 +47,11 @@
 			// ajax 요청
 			$.ajax({
 				url: '/clist/save',
+
+				 beforeSend : function(xhr) {
+		             xhr.setRequestHeader(header, token);
+		            },
+
 				cache : false,
 
 				 beforeSend : function(xhr) {
@@ -53,6 +61,7 @@
 				beforeSend : function(xhr) {
                xhr.setRequestHeader(header, token);
             	},
+
 
 				method: 'POST',
 				contentType: 'application/json',
@@ -85,6 +94,7 @@
 	//주소 api
 	$(document).ready(function() {
 		$("#caddr").click(function() {
+			
 			new daum.Postcode({
 				oncomplete: function(data) {
 				$("#caddr").val(data.address);
@@ -96,6 +106,42 @@
 	
 	function getDepartmentsAndSaveCompany(row) {
     const companyId = $(row).data('id');
+
+
+//	$(document).ready(function() {
+	  // 게시글 목록 조회
+//	  $.ajax({
+//	    url: '/posts',
+//	    method: 'GET',
+//	    success: function(company) {
+	      // 게시글 목록 출력
+//	      for (let i = 0; i < company.length; i++) {
+//	        $('#postList').append('<tr>'+'<td>' + company[i].cname + '</td>'+'</tr>');
+//	      }
+//	    }
+//	  });
+//	});
+	
+	$(document).ready(function() {
+	    $('#create-department-form').submit(function(event) {
+	        event.preventDefault();
+	        var companyId = $('#company-id').val();
+	        var departmentName = $('#department-name').val();
+	        $.ajax({
+	            type: 'POST',
+	            url: '/clist/' + companyId + '/departments',
+	            data: JSON.stringify({ 'dname': departmentName }),
+	            contentType: 'application/json',
+	            success: function(data) {
+	                $('#result').html('Department created: ' + data.dname);
+	            },
+	            error: function(xhr, status, error) {
+	                $('#result').html('Error: ' + error);
+	            }
+	        });
+	    });
+	});
+	
 
     // 새로운 요청 보내기
     // 부서 정보 가져오기
@@ -116,6 +162,7 @@
             console.log("등록된 부서가 없습니다"+error);
         }
     });
+
 
     // 회사 저장
     $("#save").off('click').on('click', function(){
