@@ -9,22 +9,33 @@ import com.Team_Project.member.dto.MemberDTO;
 import com.Team_Project.member.repository.MemberRepository;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
 
-    public MemberService(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
-
+    
     @Transactional
+//    @Transactional
+//    public void register(Member member) {
+//        if (memberRepository.existsByEmail(member.getEmail())) {
+//            throw new IllegalStateException("이미 존재하는 이메일입니다.");
+//        }
+//        memberRepository.save(member);
+//    }
     public void register(Member member) {
         if (memberRepository.existsByEmail(member.getEmail())) {
             throw new IllegalStateException("이미 존재하는 이메일입니다.");
         }
         memberRepository.save(member);
     }
+    
+    
     public boolean emailExists(String email) {
         return memberRepository.findByEmail(email) != null;
     }
@@ -42,4 +53,5 @@ public class MemberService {
         Optional<Member> existingUser = memberRepository.findByEmail(email);
         return existingUser.isPresent();
     }
+    
 }
