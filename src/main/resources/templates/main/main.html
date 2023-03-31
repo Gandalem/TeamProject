@@ -1,7 +1,6 @@
 
 <html layout:decorate="~{layout}">
 <div layout:fragment="content">
-<h1>인덱스 페이지</h1>
 
     <div class="index_outdiv">
         <form>
@@ -9,7 +8,7 @@
             <div class="index_div1">
                 <div class="index_div1_div1">
                     <table class="table">
-                        <tr><th>부서명 : </th><td>부서부서</td></tr>
+                        <tr id="ttr1"><th>부서명 : </th><td>부서부서</td></tr>
                         <tr><th>회원명 : </th><td>김이박최정이름</td></tr>
                     </table>
                 </div>
@@ -30,16 +29,12 @@
     </div>
 
     <script>
-        var date; 
-
+        var datee; 
 
         // 현재시간 등록 스크립트
         function nDate() {
         	
-        	alert ("함수호출성공");
-        	setInterval(); 
-        	
-            date = setInterval(function () { 
+            datee = setInterval(function () {
                 var today = "현재 시간 :  "; 
                 var newDate = new Date(); 
 
@@ -50,9 +45,9 @@
                 today += (newDate.getMinutes() + "분 ");
                 today += (newDate.getSeconds() + "초")
 	                
-                alert (today);
 	            $("#date5").text(today); 
-            }, 1000); 
+            }, 1000);
+            
         }
         
         
@@ -62,6 +57,9 @@
             var isEndDisabled = localStorage.getItem('isEndDisabled') === 'true';
             $("#gw").prop("disabled", isStartDisabled);
             $("#lw").prop("disabled", isEndDisabled);
+            
+            // 페이지 로드시 현재시간 함수 호출
+            nDate();
         });
 
 		// 출근 버튼 클릭시 현재 시간 함수 등록
@@ -167,31 +165,32 @@
 
 		
 		// db에 저장된 출근 시간을 가져와서 View에 찍기
-	    $(document).ready(function() {
-	    	
-			// 추가
-			var token = $("meta[name='_csrf']").attr("content");
-	        var header = $("meta[name='_csrf_header']").attr("content");
-	    	
-	        $.ajax({
-	            url: '/commute/vstart',
-	            
-			    // 추가
-			    beforeSend : function(xhr) {
-		             xhr.setRequestHeader(header, token);
-		            },
-	            
-	            type: 'GET',
-	            dataType: 'json',
-	            success: function(data) {
-	                var start = data.workStart;
-	                $('#sgw').html(start);
-	            },
-	            error: function(){
-	            	console.log("에러");
-	            }
-	        });
-	    });
+		$(document).ready(function() {
+
+		    // 추가
+		    var token = $("meta[name='_csrf']").attr("content");
+		    var header = $("meta[name='_csrf_header']").attr("content");
+
+		    $.ajax({
+		        url: '/commute/vstart',
+
+		        // 추가
+		        beforeSend: function(xhr) {
+		            xhr.setRequestHeader(header, token);
+		        },
+
+		        type: 'GET',
+		        dataType: 'text', // 변경: dataType을 'json'에서 'text'로 변경
+		        success: function(data) {
+		            var start = data;
+		            $('#sgw').html(start);
+		        },
+
+		        error: function() {
+		            console.log("에러");
+		        }
+		    });
+		});
 		
 		// db에 저장된 퇴근 시간을 가져와서 View에 찍기
 	    $(document).ready(function() {
@@ -209,9 +208,9 @@
 		            },
 	            
 	            type: 'GET',
-	            dataType: 'json',
+	            dataType: 'text',
 	            success: function(data) {
-	                var end = data.workEnd;
+	                var end = data;
 	                $('#slw').html(end);
 	            },
 	            error: function(){

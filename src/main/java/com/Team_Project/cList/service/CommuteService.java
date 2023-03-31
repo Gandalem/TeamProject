@@ -39,11 +39,6 @@ public class CommuteService {
     	    
     }
 
-    
-    
-    
-    
-    
     // DB에 저장된 출, 퇴근 시간 리스트 가져오기
     public Commute getLastCommute() {
         return commuteRepository.findFirstByOrderByIdxDesc();
