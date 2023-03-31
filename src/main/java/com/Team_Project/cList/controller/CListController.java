@@ -51,8 +51,9 @@ public class CListController {
 	}
 	
 	@PostMapping("/dsave")
-    public @ResponseBody Department saveDepartment(@RequestBody Department department) {
-        return dService.saveDepartment(department);
+    public @ResponseBody void saveDepartment(@RequestBody Department department) {
+		dService.saveDepartment(department);
+        
     }
 	
 	

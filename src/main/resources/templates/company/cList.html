@@ -27,7 +27,7 @@
 			<div id="company_submit">등록하기</div>
 			<div class="company_board">				
 				<table>
-					<tr th:each="list : ${list}" onclick="createDepartment(this)" th:attr="data-id=${list.id}" th:id="${list.id}">
+					<tr th:each="list : ${list}" onclick="getDepartmentsAndSaveCompany(this)" th:attr="data-id=${list.id}">
   						<td style="cursor: pointer;" th:text="${list.cname}"></td>
 					</tr>
 				</table>
@@ -40,7 +40,7 @@
 		   	<div class="team_board">
 		   
 		   	</div>
-		   	<input id="save" type="submit" value="저장">
+		   	<input id="save" value="저장">
 		   	<div id="cancel">취소</div> 
 		</div>
 	</div>

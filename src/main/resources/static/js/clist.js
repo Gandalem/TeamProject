@@ -35,11 +35,8 @@
 		var cnumber = $('#cnumber').val();
 		var number = $('#number').val();
 		var token = $("meta[name='_csrf']").attr("content");
-<<<<<<< HEAD
 	    var header = $("meta[name='_csrf_header']").attr("content");
-=======
-        var header = $("meta[name='_csrf_header']").attr("content");
->>>>>>> ca81f795a56acbaaac6a3c076d2d974e5359d017
+
 		// 입력값이 빈 경우 알림창 띄우기
 		if (cname.length === 0 || address.length === 0 || cnumber.length === 0 || number.length === 0) {
 			alert('데이터를 입력하셔야 합니다.');
@@ -47,15 +44,16 @@
 			// ajax 요청
 			$.ajax({
 				url: '/clist/save',
-<<<<<<< HEAD
+				cache : false,
+
 				 beforeSend : function(xhr) {
 		             xhr.setRequestHeader(header, token);
 		            },
-=======
+
 				beforeSend : function(xhr) {
                xhr.setRequestHeader(header, token);
             	},
->>>>>>> ca81f795a56acbaaac6a3c076d2d974e5359d017
+
 				method: 'POST',
 				contentType: 'application/json',
 				data: JSON.stringify({
@@ -95,67 +93,128 @@
 			}).open();
 		});
 	});
+	
+	function getDepartmentsAndSaveCompany(row) {
+    const companyId = $(row).data('id');
 
-	// 회사를 클릭하면 실행되는 함수
-	function createDepartment(element) {
-	const companyId = $(element).data('id');
-	    $.ajax({
-	        url: '/clist/getDepartments',
-	        type: 'GET',
-	        data: { companyId: companyId },
-	        success: function(response) {
-	            const teamBoard = $('.company_team .team_board');
-	            teamBoard.empty();
-	            $.each(response, function(index, department) {
-	                const departmentRow = '<div class="department_row">' + department.dname + '</div>';
-	                teamBoard.append(departmentRow);
-	            });
-	        },
-	        error: function(xhr, status, error) {
-	            console.log(error);
-	        }
-	    });
-	}
-	
-	//저장 버튼 클릭시 부서 테이블 저장
-	function createDepartment(element) {
-				const companyId = $(element).data('id');
-	$(document).ready(function() {
-		$("#save").click(function(){
-			var dname = $('#department-name').val();
-			var token = $("meta[name='_csrf']").attr("content");
-         	var header = $("meta[name='_csrf_header']").attr("content");
-			if(dname.length === 0){
-				alert('데이터를 입력하셔야 합니다.');
-			}else{
-				$.ajax({
-				url: '/clist/dsave',
-				beforeSend : function(xhr) {
-               xhr.setRequestHeader(header, token);
-            	},
-				method: 'POST',
-				contentType: 'application/json',
-				data: JSON.stringify({
-					dname : dname,
-					companyId : companyId
-				}),
-				success: function(response) {
-					console.log(response); // 저장된 회사 부서 정보 출력
-				},
-				error: function(error) {
-					console.log(error);
-				}
-			});
-			}
-		});
-	});
-	}
-	
-	
-	
-	
-	      
-	
+    // 새로운 요청 보내기
+    // 부서 정보 가져오기
+     $.ajax({
+        url: '/clist/getDepartments',
+        cache : false,
+        type: 'GET',
+        data: { companyId: companyId },
+        success: function(response) {
+            const teamBoard = $('.company_team .team_board');
+            let html = '';
+            $.each(response, function(index, department) {
+                html += '<div class="department_row">' + department.dname + '</div>';
+            });
+            teamBoard.html(html);
+        },
+        error: function(xhr, status, error) {
+            console.log("등록된 부서가 없습니다"+error);
+        }
+    });
 
-		
+    // 회사 저장
+    $("#save").off('click').on('click', function(){
+        const dname = $('#department-name').val();
+        const token = $("meta[name='_csrf']").attr("content");
+        const header = $("meta[name='_csrf_header']").attr("content");
+
+        if(dname.length === 0) {
+            alert('데이터를 입력하셔야 합니다.');
+        } else {
+            $.ajax({
+                url: '/clist/dsave',
+                cache : false,
+                beforeSend : function(xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    dname : dname,
+                    company : companyId
+                }),
+                success: function(response) {
+                    console.log(response); // 저장된 회사 부서 정보 출력
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+    });
+}
+
+
+/*
+let currentRequest = null; // 현재 보낸 요청
+
+function getDepartmentsAndSaveCompany(element) {
+    const companyId = $(element).data('id');
+    
+    // 이전에 보낸 요청이 있다면 취소
+    if (currentRequest) {
+        currentRequest.abort();
+    }
+    
+    // 새로운 요청 보내기
+    currentRequest = $.ajax({
+        url: '/clist/getDepartments',
+        type: 'GET',
+        data: { companyId: companyId },
+        success: function(response) {
+            const teamBoard = $('.company_team .team_board');
+            teamBoard.empty();
+            $.each(response, function(index, department) {
+                const departmentRow = '<div class="department_row">' + department.dname + '</div>';
+                teamBoard.append(departmentRow);
+            });
+        },
+        error: function(xhr, status, error) {
+            console.log(error);
+        }
+    });
+}
+
+// 회사 저장
+$(document).ready(function() {
+    $("#save").click(function(){
+        const dname = $('#department-name').val();
+        const companyId = $('#data-id').val();
+        const token = $("meta[name='_csrf']").attr("content");
+        const header = $("meta[name='_csrf_header']").attr("content");
+
+        if(dname.length === 0) {
+            alert('데이터를 입력하셔야 합니다.');
+        } else {
+            $.ajax({
+                url: '/clist/dsave',
+                beforeSend : function(xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    dname : dname,
+                    company : companyId // 클릭한 element에서 data-id 값을 가져옴
+                }),
+                success: function(response) {
+                    console.log(response); // 저장된 회사 부서 정보 출력
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+    });
+});
+
+*/
 	
+	
+	
+	  
