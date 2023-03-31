@@ -8,11 +8,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
+import com.Team_Project.cList.repository.DRepository;
 import com.Team_Project.cList.service.CListService;
+import com.Team_Project.cList.service.DService;
 import com.Team_Project.entity.Company;
+import com.Team_Project.entity.Department;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class CListController {
 	
 	private final CListService cListService;
-	
+	private final DService dService;
 	
 	@GetMapping("/main")
 	public String clist(Model model) {
@@ -38,6 +41,21 @@ public class CListController {
     public @ResponseBody Company saveCompany(@RequestBody Company company) {
         return cListService.saveCompany(company);
     }
+	
+	@GetMapping("/getDepartments")
+	@ResponseBody
+	public List<Department> getDepartments(@RequestParam Long companyId, Model model) {
+		List<Department> departments = dService.getDepartments(companyId);
+		model.addAttribute("departments", departments);
+		return departments;
+	}
+	
+	@PostMapping("/dsave")
+    public @ResponseBody Department saveDepartment(@RequestBody Department department) {
+        return dService.saveDepartment(department);
+    }
+	
+	
 	 
 	
 }

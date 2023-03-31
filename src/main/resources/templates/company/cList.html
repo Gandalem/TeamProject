@@ -26,8 +26,8 @@
 			<div id="company_submit">등록하기</div>
 			<div class="company_board">				
 				<table>
-					<tr th:each="list : ${list}">
-						<td th:text="${list.cname}"></td>
+					<tr th:each="list : ${list}" onclick="createDepartment(this)" th:attr="data-id=${list.id}" th:id="${list.id}">
+  						<td style="cursor: pointer;" th:text="${list.cname}"></td>
 					</tr>
 				</table>
 			</div>
@@ -36,14 +36,11 @@
 		<!-- 부서 목록 및 등록-->
 		<div class="company_team">
 			<div id="team_submit">+</div>
-
-		<form id="create-department-form">
-			<div class="team_board">
-			
-			</div>
-			 <input id="save" type="submit" value="저장">
-			<div id="cancel">취소</div>
-		</form>
+		   	<div class="team_board">
+		   
+		   	</div>
+		   	<input id="save" type="submit" value="저장">
+		   	<div id="cancel">취소</div> 
 		</div>
 	</div>
 	
