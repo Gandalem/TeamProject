@@ -1,7 +1,11 @@
 package com.Team_Project.cList.controller;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,21 +25,46 @@ public class CommuteController {
 	private final CommuteRepository commuteRepository;
 	
 	// DB에 출근시간저장
-	@GetMapping(value = "/commute/start")
-	public void saveWorkStart(@RequestParam("workStart") String workStart) {
+	@PostMapping(value = "/commute/start")
+	public void saveWorkStart(@RequestParam(name = "workStart") String workStart) {
 	    commuteService.saveWorkStart(workStart);
 	}
 	// DB에 퇴근시간저장
-	@GetMapping(value = "/commute/end")
-	public void saveWorkEnd() {
-		commuteService.saveWorkEnd();
+	@PostMapping(value = "/commute/end")
+	public void saveWorkEnd(@RequestParam(name = "workEnd") String workEnd) {
+	    commuteService.saveWorkEnd(workEnd);
 	}
+
+	
+	
+	
+	
+	
 	
 	// DB의 출근시간 보내기
 	@GetMapping(value = "/commute/vstart", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public Commute getLatestCommute() {
+	public Commute getsLatestCommute() {
 	    return commuteRepository.findFirstByOrderByIdxDesc();
 	}
+	
+	// DB의 퇴근시간 보내기
+	@GetMapping(value = "/commute/vend", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public Commute geteLatestCommute() {
+	    return commuteRepository.findFirstByOrderByIdxDesc();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

@@ -9,4 +9,5 @@ public interface CommuteRepository extends JpaRepository<Commute, Long>{
 	
 	// DB에 저장된 출, 퇴근 시간의 마지막 레코드를 가져오기
 	Commute findFirstByOrderByIdxDesc();
+	
 }

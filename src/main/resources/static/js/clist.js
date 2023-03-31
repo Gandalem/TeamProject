@@ -34,7 +34,8 @@
 		var address = $('#caddr').val() + ' ' + $('#caddr_detail').val();
 		var cnumber = $('#cnumber').val();
 		var number = $('#number').val();
-
+		var token = $("meta[name='_csrf']").attr("content");
+	    var header = $("meta[name='_csrf_header']").attr("content");
 		// 입력값이 빈 경우 알림창 띄우기
 		if (cname.length === 0 || address.length === 0 || cnumber.length === 0 || number.length === 0) {
 			alert('데이터를 입력하셔야 합니다.');
@@ -42,6 +43,9 @@
 			// ajax 요청
 			$.ajax({
 				url: '/clist/save',
+				 beforeSend : function(xhr) {
+		             xhr.setRequestHeader(header, token);
+		            },
 				method: 'POST',
 				contentType: 'application/json',
 				data: JSON.stringify({

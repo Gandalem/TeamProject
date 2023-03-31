@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 <!-- 반응형 작동시킬려면 meta태그에 viewport가 있어야한다. -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0 ,shrink-to-fit=no">
 <title>회사</title>
@@ -14,7 +16,7 @@
 	<script th:src="@{http://code.jquery.com/jquery-latest.min.js}"></script>
 	<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-
+	
 
 </head>
 <body>
