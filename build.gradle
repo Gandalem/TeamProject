@@ -34,8 +34,15 @@ dependencies {
 	//DB
 	runtimeOnly 'com.h2database:h2'//h2
 	runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc' //mssql
+	
+	// security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+   implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
+   testImplementation 'org.springframework.security:spring-security-test'
+	
 	//test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
 }
 
 tasks.named('test') {
