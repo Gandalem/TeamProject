@@ -35,7 +35,11 @@
 		var cnumber = $('#cnumber').val();
 		var number = $('#number').val();
 		var token = $("meta[name='_csrf']").attr("content");
+<<<<<<< HEAD
 	    var header = $("meta[name='_csrf_header']").attr("content");
+=======
+        var header = $("meta[name='_csrf_header']").attr("content");
+>>>>>>> ca81f795a56acbaaac6a3c076d2d974e5359d017
 		// 입력값이 빈 경우 알림창 띄우기
 		if (cname.length === 0 || address.length === 0 || cnumber.length === 0 || number.length === 0) {
 			alert('데이터를 입력하셔야 합니다.');
@@ -43,9 +47,15 @@
 			// ajax 요청
 			$.ajax({
 				url: '/clist/save',
+<<<<<<< HEAD
 				 beforeSend : function(xhr) {
 		             xhr.setRequestHeader(header, token);
 		            },
+=======
+				beforeSend : function(xhr) {
+               xhr.setRequestHeader(header, token);
+            	},
+>>>>>>> ca81f795a56acbaaac6a3c076d2d974e5359d017
 				method: 'POST',
 				contentType: 'application/json',
 				data: JSON.stringify({
@@ -77,7 +87,6 @@
 	//주소 api
 	$(document).ready(function() {
 		$("#caddr").click(function() {
-			
 			new daum.Postcode({
 				oncomplete: function(data) {
 				$("#caddr").val(data.address);
@@ -87,39 +96,65 @@
 		});
 	});
 
-//	$(document).ready(function() {
-	  // 게시글 목록 조회
-//	  $.ajax({
-//	    url: '/posts',
-//	    method: 'GET',
-//	    success: function(company) {
-	      // 게시글 목록 출력
-//	      for (let i = 0; i < company.length; i++) {
-//	        $('#postList').append('<tr>'+'<td>' + company[i].cname + '</td>'+'</tr>');
-//	      }
-//	    }
-//	  });
-//	});
-	
-	$(document).ready(function() {
-	    $('#create-department-form').submit(function(event) {
-	        event.preventDefault();
-	        var companyId = $('#company-id').val();
-	        var departmentName = $('#department-name').val();
-	        $.ajax({
-	            type: 'POST',
-	            url: '/clist/' + companyId + '/departments',
-	            data: JSON.stringify({ 'dname': departmentName }),
-	            contentType: 'application/json',
-	            success: function(data) {
-	                $('#result').html('Department created: ' + data.dname);
-	            },
-	            error: function(xhr, status, error) {
-	                $('#result').html('Error: ' + error);
-	            }
-	        });
+	// 회사를 클릭하면 실행되는 함수
+	function createDepartment(element) {
+	const companyId = $(element).data('id');
+	    $.ajax({
+	        url: '/clist/getDepartments',
+	        type: 'GET',
+	        data: { companyId: companyId },
+	        success: function(response) {
+	            const teamBoard = $('.company_team .team_board');
+	            teamBoard.empty();
+	            $.each(response, function(index, department) {
+	                const departmentRow = '<div class="department_row">' + department.dname + '</div>';
+	                teamBoard.append(departmentRow);
+	            });
+	        },
+	        error: function(xhr, status, error) {
+	            console.log(error);
+	        }
 	    });
+	}
+	
+	//저장 버튼 클릭시 부서 테이블 저장
+	function createDepartment(element) {
+				const companyId = $(element).data('id');
+	$(document).ready(function() {
+		$("#save").click(function(){
+			var dname = $('#department-name').val();
+			var token = $("meta[name='_csrf']").attr("content");
+         	var header = $("meta[name='_csrf_header']").attr("content");
+			if(dname.length === 0){
+				alert('데이터를 입력하셔야 합니다.');
+			}else{
+				$.ajax({
+				url: '/clist/dsave',
+				beforeSend : function(xhr) {
+               xhr.setRequestHeader(header, token);
+            	},
+				method: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify({
+					dname : dname,
+					companyId : companyId
+				}),
+				success: function(response) {
+					console.log(response); // 저장된 회사 부서 정보 출력
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
+			}
+		});
 	});
+	}
+	
+	
+	
+	
+	      
 	
 
 		
