@@ -1,0 +1,51 @@
+<html layout:decorate="~{layout}">
+
+<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<body layout:fragment="content">
+	<div id="modal">
+   
+		<div class="modal_content">
+		
+			<input type="text" name="cname" id="cname" placeholder="회사이름">
+			<input type="text" name="caddr" id="caddr" placeholder="회사주소">
+			<input type="text" name="caddr_detail" id="caddr_detail" placeholder="상세주소">
+			<input type="text" name="name" id="name" placeholder="사업자 이름">
+			<input type="text" name="cnumber" id="cnumber" placeholder="사업자 등록번호">
+			<input type="text" name="number" id="number" placeholder="회사번호">
+					
+			<button type="button" id="company_save">등록</button>
+			<button type="button" id="modal_close_btn">취소</button>
+			
+		</div>
+	   
+		<div class="modal_layer"></div>
+	</div>
+	<!-- 회사 목록 및 등록-->
+	<div class="company">
+		<div class="company_list">
+			<div id="company_submit">등록하기</div>
+			<div class="company_board">				
+				<table>
+					<tr th:each="list : ${list}" onclick="getDepartmentsAndSaveCompany(this)" th:attr="data-id=${list.id}">
+  						<td style="cursor: pointer;" th:text="${list.cname}"></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		
+		<!-- 부서 목록 및 등록-->
+		<div class="company_team">
+			<div id="team_submit">+</div>
+		   	<div class="team_board">
+		   
+		   	</div>
+		   	<input id="save" value="저장">
+		   	<div id="cancel">취소</div> 
+		</div>
+	</div>
+	
+	
+	
+</body>
+</html>

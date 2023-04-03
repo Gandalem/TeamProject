@@ -1,0 +1,229 @@
+
+<html layout:decorate="~{layout}">
+<div layout:fragment="content">
+
+    <div class="index_outdiv">
+        <form>
+
+            <div class="index_div1">
+                <div class="index_div1_div1">
+                    <table class="table">
+                        <tr id="ttr1"><th>부서명 : </th><td>부서부서</td></tr>
+                        <tr><th>회원명 : </th><td>김이박최정이름</td></tr>
+                    </table>
+                </div>
+                <div class="index_div1_div2" id="date5"></div>
+                <div class="index_div1_div3"><a href="/" class="index_div1_a">근무일지 등록</a></div>
+            </div>
+
+            <div class="index_div2">
+                <div class="index_div2_div1" id="sgw">출근 시간</div>
+                <div class="index_div2_div2" id="slw">-</div>
+
+                <button class="btn btn-success" id="gw">출근</button>
+                <button class="btn btn-secondary" id="lw">퇴근</button>
+                
+            </div>
+
+     	</form>
+    </div>
+
+    <script>
+        var datee; 
+
+        // 현재시간 등록 스크립트
+        function nDate() {
+        	
+            datee = setInterval(function () {
+                var today = "현재 시간 :  "; 
+                var newDate = new Date(); 
+
+                today += newDate.getFullYear() + "년 "; 
+               	today += ("0" + (newDate.getMonth() + 1)).slice(-2) + "월 ";
+                today += ("0" + newDate.getDate()).slice(-2) + "일 "; 
+            	today += (newDate.getHours() + "시 ");
+                today += (newDate.getMinutes() + "분 ");
+                today += (newDate.getSeconds() + "초")
+	                
+	            $("#date5").text(today); 
+            }, 1000);
+            
+        }
+        
+        
+        // 페이지 로드 후 버튼 상태 그대로(로컬에 저장)
+        $(document).ready(function() {
+            var isStartDisabled = localStorage.getItem('isStartDisabled') === 'true';
+            var isEndDisabled = localStorage.getItem('isEndDisabled') === 'true';
+            $("#gw").prop("disabled", isStartDisabled);
+            $("#lw").prop("disabled", isEndDisabled);
+            
+            // 페이지 로드시 현재시간 함수 호출
+            nDate();
+        });
+
+		// 출근 버튼 클릭시 현재 시간 함수 등록
+		$("#gw").click(function() {
+			
+			// 현재 시간을 저장
+			var startDate = new Date();
+			var startYear = startDate.getFullYear();
+			var startMonth = startDate.getMonth() + 1;
+			var startDay = startDate.getDate();
+			var startHour = startDate.getHours();
+			var startMinute = startDate.getMinutes();
+			var startSecond = startDate.getSeconds();
+			var startTime = startYear + "년 " + startMonth + '월 ' + startDay + '일 ' + startHour + '시 ' + startMinute + '분 ' + startSecond + '초';
+
+			
+			$(this).prop("disabled", true);    // 출근 버튼 비활성화
+			$("#lw").prop("disabled", false);  // 퇴근 버튼 활성화
+			
+			// 추가
+			var token = $("meta[name='_csrf']").attr("content");
+	        var header = $("meta[name='_csrf_header']").attr("content");
+	         
+			$.ajax({
+			    type: "POST",
+			    url: "/commute/start",
+			    
+			    // 추가
+			    beforeSend : function(xhr) {
+		             xhr.setRequestHeader(header, token);
+		            },
+			    
+		        data: {
+			        workStart: startTime
+			    },
+			    success: function(data) {
+			        console.log(data);
+			    },
+			    error: function() {
+			        console.log("에러 발생");
+			    }
+			});
+			
+			// 새로고침 하면서 출근시간 표시하기
+			alert("출근이 완료되었습니다. \n 출근시간 : " + startTime);
+			location.reload();
+			
+	        // 버튼 상태 저장
+	        localStorage.setItem('isStartDisabled', true);
+	        localStorage.setItem('isEndDisabled', false);
+			  
+		});
+		
+		// 퇴근 버튼 클릭시 현재시간 함수 등록
+		$("#lw").click(function() {
+		    // 현재 시간을 저장
+		    var endDate = new Date();
+		    var endYear = endDate.getFullYear();
+		    var endMonth = endDate.getMonth() + 1;
+		    var endDay = endDate.getDate();
+		    var endHour = endDate.getHours();
+		    var endMinute = endDate.getMinutes();
+		    var endSecond = endDate.getSeconds();
+		    var endTime = endYear + "년 " + endMonth + '월 ' + endDay + '일 ' + endHour + '시 ' + endMinute + '분 ' + endSecond + '초';
+
+		    $(this).prop("disabled", true);   // 퇴근 버튼 비활성화
+		    $("#gw").prop("disabled", false); // 출근 버튼 활성화
+		    
+			// 추가
+			var token = $("meta[name='_csrf']").attr("content");
+	        var header = $("meta[name='_csrf_header']").attr("content");
+
+		    $.ajax({
+		        type: "POST",
+		        url: "/commute/end",
+		        
+			    // 추가
+			    beforeSend : function(xhr) {
+		             xhr.setRequestHeader(header, token);
+		            },
+		        
+		        data: {
+		            workEnd: endTime
+		        },
+		        success: function(data) {
+		            console.log(data);
+		        },
+		        error: function() {
+		            console.log("에러 발생");
+		        }
+		    });
+		    
+		    // 새로고침하면서 퇴근시간 표시하기
+			alert("퇴근이 완료되었습니다. \n 퇴근시간 : " + endTime);
+			location.reload();
+		    
+	        // 버튼 상태 저장
+	        localStorage.setItem('isStartDisabled', false);
+	        localStorage.setItem('isEndDisabled', true);
+	        
+		});
+
+
+		
+		// db에 저장된 출근 시간을 가져와서 View에 찍기
+		$(document).ready(function() {
+
+		    // 추가
+		    var token = $("meta[name='_csrf']").attr("content");
+		    var header = $("meta[name='_csrf_header']").attr("content");
+
+		    $.ajax({
+		        url: '/commute/vstart',
+
+		        // 추가
+		        beforeSend: function(xhr) {
+		            xhr.setRequestHeader(header, token);
+		        },
+
+		        type: 'GET',
+		        dataType: 'text', // 변경: dataType을 'json'에서 'text'로 변경
+		        success: function(data) {
+		            var start = data;
+		            $('#sgw').html(start);
+		        },
+
+		        error: function() {
+		            console.log("에러");
+		        }
+		    });
+		});
+		
+		// db에 저장된 퇴근 시간을 가져와서 View에 찍기
+	    $(document).ready(function() {
+	    	
+			// 추가
+			var token = $("meta[name='_csrf']").attr("content");
+	        var header = $("meta[name='_csrf_header']").attr("content");
+	    	
+	        $.ajax({
+	            url: '/commute/vend',
+	            
+			    // 추가
+			    beforeSend : function(xhr) {
+		             xhr.setRequestHeader(header, token);
+		            },
+	            
+	            type: 'GET',
+	            dataType: 'text',
+	            success: function(data) {
+	                var end = data;
+	                $('#slw').html(end);
+	            },
+	            error: function(){
+	            	console.log("에러");
+	            }
+	        });
+	    });
+		
+		
+		
+		
+		
+
+    </script>
+</div>
+</html>
