@@ -1,5 +1,4 @@
 	
-	$(document).ready(function(){
 		
 		var companyId = null;	
 		
@@ -95,7 +94,6 @@
 			var input = '<div style="text-align: center;"><input type="text" name="departmentName" value=""><div/>';
 			$('#departmentTable > tbody:last').append(input);
 		});
-	});
 	
 	
 	//모달창 on
@@ -194,15 +192,11 @@
 		});
 	});
 	
-    // 회사 저장
+    // 부서 저장
     $("#save").off('click').on('click', function(){
-        const dname = $('#department-name').val();
+        const dname = $('#departmentName').val();
         const token = $("meta[name='_csrf']").attr("content");
         const header = $("meta[name='_csrf_header']").attr("content");
-
-        if(dname.length === 0) {
-            alert('데이터를 입력하셔야 합니다.');
-        } else {
             $.ajax({
                 url: '/clist/dsave',
                 cache : false,
@@ -213,24 +207,20 @@
                 contentType: 'application/json',
                 data: JSON.stringify({
                     dname : dname,
-                    company : companyId
+                    companyId : companyId
                 }),
                 success: function(response) {
                     console.log(response); // 저장된 회사 부서 정보 출력
-                    
+                    $('#companyTable').DataTable().ajax.reload();
                     
                 },
                 error: function(error) {
                     console.log(error);
                 }
             });
-        }
-    });
+        });
 	
-	//부서 저장 버튼
-	$('#save').on('click', function(){
-		
-	});
+
 	
 	
  
