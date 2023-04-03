@@ -1,18 +1,13 @@
 package com.Team_Project.cList.controller;
 
 import java.security.Principal;
-import java.util.List;
 
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.Team_Project.cList.service.CommuteService;
-import com.Team_Project.entity.Commute;
-import com.Team_Project.entity.Member;
-import com.Team_Project.member.Service.MemberService;
+import com.Team_Project.member.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
 

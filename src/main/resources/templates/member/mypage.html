@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Page</title>
+    <style>
+        .profile-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+    <h1>My Page</h1>
+    <div class="profile-container">
+        <img src="${member.profilePicture}" alt="Profile Picture" width="150" height="150">
+        <div class="profile-info">
+            <p><strong>Name:</strong> ${member.name}</p>
+            <p><strong>Email:</strong> ${member.email}</p>
+            <p><strong>Phone Number:</strong> ${member.phoneNumber}</p>
+            <p><strong>Address:</strong> ${member.sample6_postcode} ${member.sample6_address} ${member.sample6_detailAddress} ${member.sample6_extraAddress}</p>
+        </div>
+    </div>
+
+    <h2>Update Profile Information</h2>
+    <!-- Update profile form -->
+    <form action="/update-profile" method="post">
+        <!-- Name, Address, and Phone Number input fields -->
+        <!-- ... -->
+
+        <button type="submit">Update Profile</button>
+    </form>
+
+    <h2>Change Password</h2>
+    <!-- Change password form -->
+    <form action="/change-password" method="post">
+        <!-- Old and new password input fields -->
+        <!-- ... -->
+
+        <button type="submit">Change Password</button>
+    </form>
+
+    <h2>Delete Account</h2>
+    <!-- Delete account form -->
+    <form action="/delete-account" method="post" onsubmit="return confirm('정말로 계정을 삭제하시겠습니까?');">
+        <button type="submit">Delete Account</button>
+    </form>
+</body>
+</html>

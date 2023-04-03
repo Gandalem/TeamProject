@@ -27,7 +27,10 @@ public class MemberDTO {
     private String confirmPassword;
     
     @NotEmpty(message = "주소는 필수 입력 값입니다.")
-    private String address;
+    private String sample6_postcode;
+    private String sample6_address;
+    private String sample6_detailAddress;
+    private String sample6_extraAddress;
 
-    // getters and setters
+   
 }
