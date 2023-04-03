@@ -17,10 +17,9 @@ import lombok.extern.log4j.Log4j2;
 @Transactional
 @RequiredArgsConstructor
 public class MemberService {
+	
     private final MemberRepository memberRepository;
 
-    
-    @Transactional
     public void register(Member member) {
         if (memberRepository.existsByEmail(member.getEmail())) {
             throw new IllegalStateException("이미 존재하는 이메일입니다.");
@@ -45,9 +44,9 @@ public class MemberService {
         member.setSample6_extraAddress(memberDTO.getSample6_extraAddress());
         return memberRepository.save(member);
     }
+
     public boolean isEmailDuplicate(String email) {
-        Optional<Member> existingUser = memberRepository.findByEmail(email);
-        return existingUser.isPresent();
+        return memberRepository.existsByEmail(email);
     }
 
 

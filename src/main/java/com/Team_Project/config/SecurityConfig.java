@@ -15,10 +15,15 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity(prePostEnabled = true)	
 public class SecurityConfig {
-
+	
+	private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
    
+	public SecurityConfig(CustomAuthenticationEntryPoint customAuthenticationEntryPoint) {
+        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
+    }
+	
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
        
@@ -55,8 +60,8 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
         ;
 
-//        http.exceptionHandling()
-//        .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+        http.exceptionHandling()
+        .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
                 
         return http.build();
     }

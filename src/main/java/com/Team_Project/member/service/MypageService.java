@@ -11,13 +11,14 @@ import com.Team_Project.entity.Member;
 import com.Team_Project.member.dto.MemberDTO;
 import com.Team_Project.member.repository.MemberRepository;
 
-@Service
-public class MypageService {
-    @Autowired
-    private MemberRepository memberRepository;
+import lombok.RequiredArgsConstructor;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+@Service
+@RequiredArgsConstructor
+public class MypageService {
+    
+    private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public Member getMemberByEmail(String email) {
         return memberRepository.findByEmail(email).orElse(null);

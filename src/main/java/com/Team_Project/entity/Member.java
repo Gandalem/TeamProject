@@ -88,5 +88,15 @@ public class Member implements UserDetails {
     return this.memberType;
 }
 
+	public boolean isPresent() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public Member orElse(Object object) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
 
