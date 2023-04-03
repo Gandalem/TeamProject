@@ -1,4 +1,4 @@
-package com.Team_Project.member.service;
+package com.Team_Project.member.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
