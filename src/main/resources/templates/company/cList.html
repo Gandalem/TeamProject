@@ -25,11 +25,17 @@
 	<div class="company">
 		<div class="company_list">
 			<div id="company_submit">등록하기</div>
-			<div class="company_board">				
-				<table>
-					<tr th:each="list : ${list}" onclick="getDepartmentsAndSaveCompany(this)" th:attr="data-id=${list.id}">
+			<div class="table-responsive">				
+				<table id="companyTable" class="table table-bordered">
+					<!-- <tr th:each="list : ${list}" onclick="getDepartmentsAndSaveCompany(this)" th:attr="data-id=${list.id}">
   						<td style="cursor: pointer;" th:text="${list.cname}"></td>
-					</tr>
+					</tr> -->
+					<thead class="thead-light">
+						<tr>
+							<th>회사명</th>
+						</tr>
+					</thead>
+					
 				</table>
 			</div>
 		</div>
@@ -37,8 +43,14 @@
 		<!-- 부서 목록 및 등록-->
 		<div class="company_team">
 			<div id="team_submit">+</div>
-		   	<div class="team_board">
-		   
+		   	<div class="table-responsive">
+		   		<table id="departmentTable" class="table table-bordered">
+		   			<thead class="thead-light">
+		   			<tr>
+		   				<th>부서명</th>
+		   			</tr>
+		   			</thead>
+		   		</table>
 		   	</div>
 		   	<input id="save" value="저장">
 		   	<div id="cancel">취소</div> 

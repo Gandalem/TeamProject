@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.Team_Project.entity.Member;
+import com.Team_Project.member.Service.MypageService;
 import com.Team_Project.member.dto.MemberDTO;
-import com.Team_Project.member.service.MypageService;
 
 @Controller
 public class MypageController {

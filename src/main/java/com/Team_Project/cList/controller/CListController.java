@@ -28,11 +28,11 @@ public class CListController {
 	private final DService dService;
 	
 	@GetMapping("/main")
-	public String clist(Model model) {
+	public String clist() {
 		
 		List<Company> cList = cListService.companyList();
 		
-		model.addAttribute("list", cList);
+//		model.addAttribute("list", cList);
 		
 		return "company/cList";
 	}
@@ -44,9 +44,8 @@ public class CListController {
 	
 	@GetMapping("/getDepartments")
 	@ResponseBody
-	public List<Department> getDepartments(@RequestParam Long companyId, Model model) {
+	public List<Department> getDepartments(@RequestParam Long companyId) {
 		List<Department> departments = dService.getDepartments(companyId);
-		model.addAttribute("departments", departments);
 		return departments;
 	}
 	
@@ -55,6 +54,12 @@ public class CListController {
 		dService.saveDepartment(department);
         
     }
+	
+	@GetMapping("/getDepartments_null")
+	@ResponseBody
+	public List<Department> dfindall(){
+		return dService.dfindall();
+	}
 	
 	
 	 

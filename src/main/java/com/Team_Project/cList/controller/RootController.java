@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.Team_Project.cList.service.CommuteService;
-import com.Team_Project.member.service.MemberService;
+import com.Team_Project.member.Service.MemberService;
 
 import lombok.RequiredArgsConstructor;
 

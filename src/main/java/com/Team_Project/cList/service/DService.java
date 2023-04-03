@@ -28,4 +28,8 @@ public class DService {
 		return dRepository.save(department);
 	}
 	
+	public List<Department> dfindall() {
+		return dRepository.findAll();
+	}
+	
 }
