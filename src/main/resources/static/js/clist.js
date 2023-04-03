@@ -219,7 +219,9 @@
             });
         });
 	
-
+	$("#cancel").on('click', function(){
+		$('#departmentTable').DataTable().ajax.reload();
+	});	
 	
 	
  
