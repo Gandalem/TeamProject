@@ -28,7 +28,12 @@ public class Member implements UserDetails {
     private String email;
     private String password;
     private String name;
-    private String address;
+    
+    private String sample6_postcode;
+    private String sample6_address;
+    private String sample6_detailAddress;
+    private String sample6_extraAddress;
+    
     private String phoneNumber;
     private String profilePicture;
     private LocalDateTime registrationDate;
@@ -42,10 +47,6 @@ public class Member implements UserDetails {
 
     public void setMemberType(MemberType memberType) {
         this.memberType = memberType;
-    }
-
-    public String getEmail() {
-        return this.email;
     }
     
     @Override

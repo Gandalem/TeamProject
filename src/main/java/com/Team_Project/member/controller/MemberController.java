@@ -1,5 +1,7 @@
 package com.Team_Project.member.controller;
 
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -11,17 +13,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.Team_Project.entity.Member;
 import com.Team_Project.entity.MemberType;
-import com.Team_Project.member.Service.MemberService;
+import com.Team_Project.member.service.MemberService;
 import com.Team_Project.member.dto.MemberDTO;
+import com.Team_Project.member.repository.MemberRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequestMapping("/signup")
+@RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
-
-    public MemberController(MemberService memberService) {
-        this.memberService = memberService;
-    }
+    private final MemberRepository memberRepository;
 
     @GetMapping("/admin")
     public String adminSignupForm() {
@@ -33,42 +36,70 @@ public class MemberController {
         return "member/user_signup";
     }
 
-    @PostMapping("/admin")
+    @PostMapping(value = "/admin")
     public String adminSignup(MemberDTO memberDTO) {
         Member member = new Member();
+        member.setName(memberDTO.getName());
+        member.setEmail(memberDTO.getEmail());
+        member.setPassword(memberDTO.getPassword());
+        member.setSample6_postcode(memberDTO.getSample6_postcode());
+        member.setSample6_address(memberDTO.getSample6_address());
+        member.setSample6_detailAddress(memberDTO.getSample6_detailAddress());
+        member.setSample6_extraAddress(memberDTO.getSample6_extraAddress());
+        //member.setPhoneNumber(memberDTO.getPhoneNumber());
         member.setMemberType(MemberType.ADMIN);
         memberService.register(member);
-        return "redirect:/";
+        return "redirect:/"; // 회원가입 완료 페이지로 이동
     }
 
-    @PostMapping("/user")
+
+    @PostMapping(value = "/user")
     public String userSignup(MemberDTO memberDTO) {
         Member member = new Member();
+        member.setName(memberDTO.getName());
+        member.setEmail(memberDTO.getEmail());
+        member.setPassword(memberDTO.getPassword());
+        member.setSample6_postcode(memberDTO.getSample6_postcode());
+        member.setSample6_address(memberDTO.getSample6_address());
+        member.setSample6_detailAddress(memberDTO.getSample6_detailAddress());
+        member.setSample6_extraAddress(memberDTO.getSample6_extraAddress());
+        //member.setPhoneNumber(memberDTO.getPhoneNumber());
         member.setMemberType(MemberType.EMPLOYEE);
         memberService.register(member);
-        return "redirect:/";
+        return "redirect:/"; // 회원가입 완료 페이지로 이동
     }
+
     
-    @PostMapping("/check-email")
-    public ResponseEntity<String> checkEmail(@RequestParam String email) {
-        if (memberService.emailExists(email)) {
-            return new ResponseEntity<>("duplicate", HttpStatus.OK);
+    @PostMapping(value = "/check-email")
+    public ResponseEntity<String> checkEmail(@RequestParam("email") String email) {
+        Optional<Member> memberOpt = memberRepository.findByEmail(email);
+        if (memberOpt.isPresent()) {
+            return ResponseEntity.ok("duplicate");
         } else {
-            return new ResponseEntity<>("unique", HttpStatus.OK);
+            return ResponseEntity.ok("");
         }
     }
+
  
-    @PostMapping("/register")
+    @PostMapping(value = "/register")
     public ResponseEntity<String> registerMember(@RequestBody MemberDTO memberDTO) {
-        // validate MemberDTO fields
-        if (memberService.emailExists(memberDTO.getEmail())) {
+        String email = memberDTO.getEmail();
+        if (memberService.isEmailDuplicate(email)) {
             return new ResponseEntity<>("duplicate_email", HttpStatus.BAD_REQUEST);
         } else {
             Member member = new Member();
+            member.setName(memberDTO.getName());
+            member.setEmail(email);
+            member.setPassword(memberDTO.getPassword());
+            member.setSample6_postcode(memberDTO.getSample6_postcode());
+            member.setSample6_address(memberDTO.getSample6_address());
+            member.setSample6_detailAddress(memberDTO.getSample6_detailAddress());
+            member.setSample6_extraAddress(memberDTO.getSample6_extraAddress());
+            member.setMemberType(MemberType.EMPLOYEE);
             memberService.register(member);
-            // return success response
             return new ResponseEntity<>("member_created", HttpStatus.OK);
         }
     }
+
     
 }
