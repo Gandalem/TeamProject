@@ -1,81 +1,50 @@
 	
-		
-		var companyId = null;	
-		
-		//회사 목록
-		var table = $('#companyTable').DataTable({
+	
+	var companyId = null;	
+	
+	//회사 목록
+	var table = $('#companyTable').DataTable({
+		serverSide: true,
+		processing: true,
+		destroy: true,
+		ajax: {
+	    url: '/clist/posts',
+		    type: 'GET',
+		    dataSrc: ''
+		},
+		columns: [
+		    { data: 'cname' }
+		],
+		columnDefs: [{
+		   defaultContent: '-',
+		   targets: '_all',
+		   className: 'dt-body-center'
+		}]
+	 
+	});
+	     
+	     
+	     
+	     //회사 목록 클릭 이벤트
+	 $('#companyTable tbody').on('click', 'tr', function() {
+	    // 선택한 행에 .selected 클래스 추가
+	    if ($(this).hasClass('selected')) {
+	        $(this).removeClass('selected');
+	    } else {
+	        table.$('tr.selected').removeClass('selected');
+	        $(this).addClass('selected');
+	        companyId = table.row(this).data().id;
+	        console.log('회사 Id', companyId);
+	        $('#departmentTable').DataTable({
 			serverSide: true,
 			processing: true,
 			destroy: true,
 			ajax: {
-			    url: '/clist/posts',
-			    type: 'GET',
-			    dataSrc: ''
-			},
-			columns: [
-			    { data: 'cname' }
-			],
-			columnDefs: [{
-			   defaultContent: '-',
-			   targets: '_all',
-			   className: 'dt-body-center'
-			}]
-		 
-		});
-		     
-		     
-		     
-		     //회사 목록 클릭 이벤트
-		 $('#companyTable tbody').on('click', 'tr', function() {
-		    // 선택한 행에 .selected 클래스 추가
-		    if ($(this).hasClass('selected')) {
-		        $(this).removeClass('selected');
-		    } else {
-		        table.$('tr.selected').removeClass('selected');
-		        $(this).addClass('selected');
-		        companyId = table.row(this).data().id;
-		        console.log('회사 Id', companyId);
-		        $('#departmentTable').DataTable({
-				serverSide: true,
-				processing: true,
-				destroy: true,
-				ajax: {
-					url: '/clist/getDepartments',
-				     type: 'GET',
-				     dataSrc: '',
-					 data: function(d) {
-					    d.companyId = companyId;
-					}
-				},
-				columns: [
-			     	{ data: 'dname' }
-			 	],
-			 	columnDefs: [{
-				    defaultContent: '데이터가 없습니다.',
-				    targets: '_all',
-				    className: 'dt-body-center'
-			 	}]
-			  	
-			});
-		        $('#departmentTable').DataTable().ajax.reload();
-		        
-		    }
-		    
-		});
-		
-		
-		//부서 목록    
-		 var departmentTable = 
-		 $('#departmentTable').DataTable({
-			serverSide: true,
-			processing: true,
-			destroy: true,
-			ajax: {
-				url: '/clist/getDepartments_null',
+				url: '/clist/getDepartments',
 			     type: 'GET',
 			     dataSrc: '',
 				 data: function(d) {
-				    
+				    d.companyId = companyId;
 				}
 			},
 			columns: [
@@ -88,12 +57,43 @@
 		 	}]
 		  	
 		});
-		
-		//부서 목록 행 추가
-		$("#team_submit").click(function() {
-			var input = '<div style="text-align: center;"><input type="text" name="departmentName" value=""><div/>';
-			$('#departmentTable > tbody:last').append(input);
-		});
+	        $('#departmentTable').DataTable().ajax.reload();
+	        
+	    }
+	    
+	});
+	
+	
+	//부서 목록    
+	 var departmentTable = 
+	 $('#departmentTable').DataTable({
+		serverSide: true,
+		processing: true,
+		destroy: true,
+		ajax: {
+			url: '/clist/getDepartments_null',
+		     type: 'GET',
+		     dataSrc: '',
+			 data: function(d) {
+			    
+			}
+		},
+		columns: [
+	     	{ data: 'dname' }
+	 	],
+	 	columnDefs: [{
+		    defaultContent: '데이터가 없습니다.',
+		    targets: '_all',
+		    className: 'dt-body-center'
+	 	}]
+	  	
+	});
+	
+	//부서 목록 행 추가
+	$("#team_submit").click(function() {
+		var input = '<div style="text-align: center;"><input type="text" name="departmentName" value=""><div/>';
+		$('#departmentTable > tbody:last').append(input);
+	});
 	
 	
 	//모달창 on
@@ -194,7 +194,6 @@
 	
     // 부서 저장
     $("#save").off('click').on('click', function(){
-        const dname = $('#departmentName').val();
         const token = $("meta[name='_csrf']").attr("content");
         const header = $("meta[name='_csrf_header']").attr("content");
             $.ajax({
@@ -206,12 +205,12 @@
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({
-                    dname : dname,
-                    companyId : companyId
+                    dname : $('input[name=departmentName]').val(),
+                    company : companyId
                 }),
                 success: function(response) {
                     console.log(response); // 저장된 회사 부서 정보 출력
-                    $('#companyTable').DataTable().ajax.reload();
+                    $('#departmentTable').DataTable().ajax.reload();
                     
                 },
                 error: function(error) {
