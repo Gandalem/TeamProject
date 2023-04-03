@@ -37,7 +37,7 @@ public class SecurityConfig {
       
        
       // 03-10 로그인처리
-        http.formLogin()
+      	http.formLogin()
                 .loginPage("/login")
                 .defaultSuccessUrl("/")
                 .usernameParameter("email")
@@ -55,8 +55,8 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
         ;
 
-//        http.exceptionHandling()
-//        .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+        http.exceptionHandling()
+        .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
                 
         return http.build();
     }

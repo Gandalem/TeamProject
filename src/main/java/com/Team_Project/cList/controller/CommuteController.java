@@ -35,7 +35,7 @@ public class CommuteController {
 	    commuteService.saveWorkEnd(workEnd);
 	}
 	
-    // DB의 출근시간 보내기
+    // DB의 출근시간 View에 찍기
     @GetMapping(value = "/commute/vstart", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String getsLatestCommute() {
@@ -45,7 +45,7 @@ public class CommuteController {
         return formattedWorkStart;
     }
 	
-	// DB의 퇴근시간 보내기
+	// DB의 퇴근시간 View에 찍기
 	@GetMapping(value = "/commute/vend", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public String geteLatestCommute() {
