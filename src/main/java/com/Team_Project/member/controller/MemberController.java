@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.Team_Project.entity.Member;
 import com.Team_Project.entity.MemberType;
-import com.Team_Project.member.Service.MemberService;
 import com.Team_Project.member.dto.MemberDTO;
 import com.Team_Project.member.repository.MemberRepository;
+import com.Team_Project.member.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
 
