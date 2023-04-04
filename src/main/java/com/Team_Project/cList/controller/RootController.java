@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 import com.Team_Project.cList.service.CommuteService;
-
-import com.Team_Project.entity.Member;
 import com.Team_Project.member.repository.MemberRepository;
-
 
 import lombok.RequiredArgsConstructor;
 
