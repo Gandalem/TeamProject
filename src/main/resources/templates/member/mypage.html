@@ -1,25 +1,29 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script type="text/javascript">
     $("#updateBtn").on("click", function() {
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
         $.ajax({
             type : "POST",
-            url : "/update",
+            url : "/mypage/update",
             data : {
+                "id" : $("#id").val(),  
                 "name" : $("#name").val(),
                 "email" : $("#email").val(),
-                "phone" : $("#phone").val(),
-                "sample6_postcode" : $("#sample4_postcode").val(),
-                "sample6_address" : $("#sample4_jibunAddress").val(),
-                "sample6_detailAddress" : $("#sample4_detailAddress").val(),
-                "sample6_extraAddress" : $("#sample4_extraAddress").val()
+                "phoneNumber" : $("#phoneNumber").val(),
+                "sample6_postcode" : $("#sample6_postcode").val(),
+                "sample6_address" : $("#sample6_jibunAddress").val(),
+                "sample6_detailAddress" : $("#sample6_detailAddress").val(),
+                "sample6_extraAddress" : $("#sample6_extraAddress").val()
             },
             beforeSend : function(xhr){
                 /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
@@ -84,21 +88,21 @@
                     <input type="text" name="email" id="email" class="form-control" th:value="${member.email}">
                 </div>
                 <div class="mb-3">
-                    <input type="text" name="phone" id="phone" class="form-control" th:value="${member.phoneNumber}">
+                    <input type="text" name="phoneNumber" id="phoneNumber" class="form-control" th:value="${member.phoneNumber}">
                 </div>
                 <div class="mb-3">
-                    <input type="text" id="sample4_postcode" class="form-control" th:value="${member.sample6_postcode}"> 
+                    <input type="text" id="sample6_postcode" class="form-control" th:value="${member.sample6_postcode}"> 
                 </div>
                 <input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
 
                 <div class="mb-3">
-                    <input type="text" id="sample4_jibunAddress" class="form-control" th:value="${member.sample6_address}">
+                    <input type="text" id="sample6_jibunAddress" class="form-control" th:value="${member.sample6_address}">
                 </div>
                 <div class="mb-3">
-                    <input type="text" id="sample4_detailAddress" class="form-control" th:value="${member.sample6_detailAddress}">
+                    <input type="text" id="sample6_detailAddress" class="form-control" th:value="${member.sample6_detailAddress}">
                 </div>
                 <div class="mb-3">
-                    <input type="text" id="sample4_extraAddress" class="form-control"th:value="${member.sample6_extraAddress}">
+                    <input type="text" id="sample6_extraAddress" class="form-control"th:value="${member.sample6_extraAddress}">
                 </div>
                 <button class="btn btn-primary" id="updateBtn" type="submit" style="float: right;">수정</button>
                 <button class="btn btn-secondary" style="float: right; margin-right: 10px;">취소</button>

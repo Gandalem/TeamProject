@@ -48,7 +48,7 @@ public class MemberController {
         member.setSample6_address(memberDTO.getSample6_address());
         member.setSample6_detailAddress(memberDTO.getSample6_detailAddress());
         member.setSample6_extraAddress(memberDTO.getSample6_extraAddress());
-        //member.setPhoneNumber(memberDTO.getPhoneNumber());
+        member.setPhoneNumber(memberDTO.getPhoneNumber());
         member.setMemberType(MemberType.ADMIN);
         memberService.register(member);
         return "redirect:/"; // 회원가입 완료 페이지로 이동
@@ -67,7 +67,7 @@ public class MemberController {
         member.setSample6_address(memberDTO.getSample6_address());
         member.setSample6_detailAddress(memberDTO.getSample6_detailAddress());
         member.setSample6_extraAddress(memberDTO.getSample6_extraAddress());
-        //member.setPhoneNumber(memberDTO.getPhoneNumber());
+        member.setPhoneNumber(memberDTO.getPhoneNumber());
         member.setMemberType(MemberType.EMPLOYEE);
         memberService.register(member);
         return "redirect:/"; // 회원가입 완료 페이지로 이동

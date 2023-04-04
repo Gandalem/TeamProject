@@ -31,6 +31,8 @@ public class MemberDTO {
     private String sample6_address;
     private String sample6_detailAddress;
     private String sample6_extraAddress;
+    
+    private String phoneNumber;
 
    
 }
