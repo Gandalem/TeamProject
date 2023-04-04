@@ -3,27 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <title>출.퇴근 관리</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="/css/attendence.css">
 </head>
 <body>
-   	<h1>출.퇴근 관리 페이지</h1>
+   	<h3 class="h3">출.퇴근 관리</h3>
 	<div class="at_odiv">
 		<div class="at_div1">
 			<form>
-				<select class="sel" id="company">
+				<select class="sel" id="company" name="company" onchange="ccompany();">
 					<option>회사선택</option>
 				</select>
-				<select class="sel" id="department">
+				<select class="sel" id="department" name="department" onchange="ddepartment();">
 					<option>부서선택</option>
 				</select>
-				<select class="sel" id="name">
+				<select class="sel" id="name" name="name" onchange="nname();">
 					<option>이름선택</option>
 				</select>
-                <select class="sel" id="year">
+                <select class="sel" id="year" name="year">
                     <option>년도</option>
                 </select>
-                <select class="sel" id="month">
+                <select class="sel" id="month" name="month">
                     <option>월</option>
                 </select>
 				<button class="bu1"> 조회하기 </button>
@@ -57,6 +58,65 @@
 	</div>
 	
 	
+	<script>
+
+	// 회사선택
+	$(document).ready(function(){
+		$.ajax({
+			url: "/atten/com",
+			method: "GET",
+			dataType: "json",
+			success : function(res){
+				for(i=0;i<res.length;i++){
+					$("#company").append('<option value="'+res[i].id+'">'+res[i].cname+'</option>');
+				}
+			}
+		});
+	});
+	// 부서선택
+	function ccompany(){
+		var companyId = $("#company option:selected").val();
+		console.log(companyId);
+		$.ajax({
+			url: "/atten/de",
+			method:"GET",
+			dataType:"json",
+			data: {companyId : companyId},
+			success : function(res){
+				//부서 선택 dropdown 초기화
+			    $("#department").empty();
+			    $("#department").append('<option>부서선택</option>');
+			    
+				for(i=0;i<res.length;i++){
+					$("#department").append('<option value="'+res[i].id+'">'+res[i].dname+'</option>');
+				}
+			}
+		});
+	}
+	// 이름선택
+	function ddepartment(){
+		var departmentId = $("#department option:selected").val();
+		console.log(departmentId);
+		$.ajax({
+			url: "/atten/na",
+			method:"GET",
+			dataType:"json",
+			data:{departmentId : departmentId},
+			success : function(res){
+			    $("#name").empty();
+			    $("#name").append('<option>이름선택</option>');
+			    for(i=0;i<res.length;i++){
+			        $("#name").append('<option value="'+res[i].id+'">'+res[i].name+'</option>');
+			    }
+			}
+		});
+	}
 	
+	
+	
+	
+	
+</script>
 </body>
+
 </html>
