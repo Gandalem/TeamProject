@@ -12,6 +12,19 @@ $(document).ready(function() {
 			}
 		} 
 	 });
+	 
+	 //모달 SelectBox 회사 리스트
+	 $.ajax({
+		url: "/clist/posts",
+		method: "GET",
+		dataType: "json",
+		success : function(res){
+			
+			for (i=0; i<res.length; i++) {
+                $("#companyModal").append('<option value="'+res[i].id+'">'+ res[i].cname +'</option>');
+			}
+		} 
+	 });
 });
 
 	//selectBox 부서 리스트
@@ -32,5 +45,25 @@ $(document).ready(function() {
 		} 
 	 });
 	}
+	
+	// 모달 SelectBox 부서 리스트
+	function Modal1(){
+		var companyId = $("#companyModal option:selected").val();
+		console.log(companyId);
+		$.ajax({
+		url: "/clist/getDepartments",
+		method: "GET",
+		dataType: "json",
+		data: {
+			companyId : companyId
+		},
+		success : function(res){
+			for (i=0; i<res.length; i++) {
+	            $("#departmentModal").append('<option value="'+res[i].id+'">'+ res[i].dname +'</option>');
+			}
+		} 
+	 });
+	}
+	
 
 
