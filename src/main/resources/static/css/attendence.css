@@ -1,0 +1,62 @@
+		.at_odiv{
+            margin:0 auto;
+            width:70%;
+        }
+        .at_div1{
+            width:84%;
+            margin:0 auto;
+            padding:20px;
+        }
+
+        .sel{
+            width:100px;height:30px;
+        }
+        .bu1{
+            width:80px; height:30px;
+        }
+
+
+        .at_div2{
+            margin-top:10px;
+        }
+        .at_div2_div1{
+            width:90%;
+            margin:0 auto;
+        }
+		
+		.th1, .th2{
+			border:1px solid black;
+			text-align:center;
+		}
+        .th1{
+            width:15%;
+        }
+        .th2{
+            width:55%;
+        }
+        .th3{
+        	width:30%;
+        }
+        .table{
+            width:100%;
+            border:1px solid black;
+        }
+        
+        .td1, .td2{
+        	border:1px solid black;
+        	
+        }
+        .td1{
+        	width:15%;
+        	
+        }
+        .td2{
+        	width:7%;
+        	text-align:center;
+        }
+		.td3{
+			border:1px solid black;
+		}
+		.td4{
+			width:30%;
+		}

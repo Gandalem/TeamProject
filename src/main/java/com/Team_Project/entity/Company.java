@@ -42,6 +42,9 @@ public class Company extends BaseTimeEntity {
 	@OneToMany
 	private List<Department> departmentId;
 	
+	@OneToMany
+	private List<Employee> employeeId;
+	
 	public Company() {
 	    // default constructor
 	}

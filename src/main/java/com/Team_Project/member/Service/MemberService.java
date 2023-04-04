@@ -36,6 +36,7 @@ public class MemberService {
         member.setName(memberDTO.getName());
         member.setEmail(memberDTO.getEmail());
         member.setPassword(memberDTO.getPassword());
+        member.setPhoneNumber(memberDTO.getPhoneNumber());
         member.setSample6_postcode(memberDTO.getSample6_postcode());
         member.setSample6_address(memberDTO.getSample6_address());
         member.setSample6_detailAddress(memberDTO.getSample6_detailAddress());
@@ -47,6 +48,13 @@ public class MemberService {
         return memberRepository.existsByEmail(email);
     }
 
+    public Member findById(Long id) {
+        return memberRepository.findById(id).orElse(null);
+    }
+
+    public void save(Member member) {
+        memberRepository.save(member);
+    }
 
 
     

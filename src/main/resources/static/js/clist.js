@@ -4,14 +4,25 @@
 	
 	//회사 목록
 	var table = $('#companyTable').DataTable({
+		dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+				"<'row'<'col-sm-12'tr>>" +
+				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>B",
 		serverSide: true,
 		processing: true,
+		autoWidth : false,
+		paging : true,
+		info : true,
+		lengthChange : true,
+		pageLength : 20,
 		destroy: true,
 		ajax: {
 	    url: '/clist/posts',
 		    type: 'GET',
 		    dataSrc: ''
 		},
+		order: [
+	        [ 0, 'asc' ]
+	    ],
 		columns: [
 		    { data: 'cname' }
 		],
