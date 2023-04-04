@@ -9,37 +9,92 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script type="text/javascript">
-    $("#updateBtn").on("click", function() {
-        var token = $("meta[name='_csrf']").attr("content");
-        var header = $("meta[name='_csrf_header']").attr("content");
-        $.ajax({
-            type : "POST",
-            url : "/mypage/update",
-            data : {
-                "id" : $("#id").val(),  
-                "name" : $("#name").val(),
-                "email" : $("#email").val(),
-                "phoneNumber" : $("#phoneNumber").val(),
-                "sample6_postcode" : $("#sample6_postcode").val(),
-                "sample6_address" : $("#sample6_jibunAddress").val(),
-                "sample6_detailAddress" : $("#sample6_detailAddress").val(),
-                "sample6_extraAddress" : $("#sample6_extraAddress").val()
-            },
-            beforeSend : function(xhr){
-                /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
-                xhr.setRequestHeader(header, token);
-            },
-            success : function(result) {
-                alert("회원 정보가 업데이트 되었습니다.");
-                /* 페이지를 새로고침 */
-                location.reload();
-            },
-            error : function(e) {
-                console.log("회원 정보 업데이트 과정에서 에러가 발생했습니다: " + e);
-            }
+    
+    $(document).ready(function() {
+        // 페이지가 로드되었을 때 실행되는 코드
+        $("#cancelBtn, #saveBtn").hide();
+        // 수정 버튼 클릭 이벤트
+        $("#updateBtn").on("click", function(event) {
+            event.preventDefault();
+            // 폼 요소들의 disabled 속성 해제
+            $("#name, #email, #phoneNumber, #sample6_postcode, #sample6_jibunAddress, #sample6_detailAddress, #sample6_extraAddress").prop("disabled", false);
+            // 버튼 보이기/숨기기
+            $("#updateBtn").hide();
+            $("#cancelBtn, #saveBtn").show();
         });
-    });
+    	    // 저장 버튼 클릭 이벤트
+    	    $("#saveBtn").on("click", function(event) {
+    	        event.preventDefault();
+    	        var token = $("meta[name='_csrf']").attr("content");
+    	        var header = $("meta[name='_csrf_header']").attr("content");
+    	        $.ajax({
+    	            type : "PUT",
+    	            url : "/member/update",
+    	            data : {
+    	                "id" : $("#id").val(),  
+    	                "name" : $("#name").val(),
+    	                "email" : $("#email").val(),
+    	                "phoneNumber" : $("#phoneNumber").val(),
+    	                "sample6_postcode" : $("#sample6_postcode").val(),
+    	                "sample6_address" : $("#sample6_jibunAddress").val(),
+    	                "sample6_detailAddress" : $("#sample6_detailAddress").val(),
+    	                "sample6_extraAddress" : $("#sample6_extraAddress").val()
+    	            },
+    	            beforeSend : function(xhr){
+    	                /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+    	                xhr.setRequestHeader(header, token);
+    	            },
+    	            success : function(result) {
+    	                alert("회원 정보가 업데이트 되었습니다.");
+    	                // 버튼 보이기/숨기기
+    	                $("#updateBtn").show();
+    	                $("#cancelBtn, #saveBtn").hide();
+    	                // 폼 요소들의 disabled 속성 설정
+    	                $("#name, #email, #phoneNumber, #sample6_postcode, #sample6_jibunAddress, #sample6_detailAddress, #sample6_extraAddress").prop("disabled", true);
+    	            },
+    	            error : function(e) {
+    	                console.log("회원 정보 업데이트 과정에서 에러가 발생했습니다: " + e);
+    	            }
+    	        });
+    	    });
+    	    $.ajax({
+    	        type: "GET",
+    	        url: "/member/" + memberId,
+    	        success: function(member) {
+    	            $("#name").val(member.name).prop("disabled", true);
+    	            $("#email").val(member.email).prop("disabled", true);
+    	            $("#phoneNumber").val(member.phoneNumber).prop("disabled", true);
+    	            $("#sample6_postcode").val(member.sample6_postcode).prop("disabled", true);
+    	            $("#sample6_jibunAddress").val(member.sample6_address).prop("disabled", true);
+    	            $("#sample6_detailAddress").val(member.sample6_detailAddress).prop("disabled", true);
+    	            $("#sample6_extraAddress").val(member.sample6_extraAddress).prop("disabled", true);
+
+    	            // 현재 주소창의 URL을 가져와서, 쿼리 파라미터를 제거한 URL을 만듭니다.
+    	            var url = window.location.href.split('?')[0];
+    	            // 만들어진 URL로 주소창을 다시 설정합니다.
+    	            window.history.replaceState({}, document.title, url);
+    	        },
+
+    	        error: function(e) {
+    	            console.log("Error retrieving member information: " + e);
+    	        },
+    	        complete: function() {
+    	            // 취소 버튼 클릭 시 이동할 URL
+    	            var cancelUrl = "/member/mypage?id=" + memberId;
+    	            $("#cancelBtn").on("click", function(event) {
+    	                event.preventDefault();
+    	                location.href = cancelUrl;
+    	            });
+    	        }
+    	    });
+
+
+
+    	});
+    	
+
 </script>
+
     <link rel="stylesheet" type="text/css" href="css/common.css">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <title>마이페이지</title>
@@ -80,38 +135,42 @@
     </header>
     <main>
         <div class="mainForm" style="text-align: center;">
-            <form class="myForm" method="post">
+            <form>
                 <div class="mb-3">
-                    <input type="text" name="name" id="name" class="form-control" th:value="${member.name}">
+                	<input type="hidden" name="id" id="id" th:value="${member.id}">
+                    <input disabled="disabled" type="text" name="mypage" id="name" class="form-control" th:value="${member.name}">
                 </div>
                 <div class="mb-3">
-                    <input type="text" name="email" id="email" class="form-control" th:value="${member.email}">
+                    <input disabled="disabled" type="text" name="mypage" id="email" class="form-control" th:value="${member.email}">
                 </div>
                 <div class="mb-3">
-                    <input type="text" name="phoneNumber" id="phoneNumber" class="form-control" th:value="${member.phoneNumber}">
+                    <input disabled="disabled" type="text" name="mypage" id="phoneNumber" class="form-control" th:value="${member.phoneNumber}">
                 </div>
                 <div class="mb-3">
-                    <input type="text" id="sample6_postcode" class="form-control" th:value="${member.sample6_postcode}"> 
+                    <input disabled="disabled" type="text" name="mypage" id="sample6_postcode" class="form-control" th:value="${member.sample6_postcode}"> 
                 </div>
-                <input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
+                <input disabled="disabled" type="button" name="mypage" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
 
                 <div class="mb-3">
-                    <input type="text" id="sample6_jibunAddress" class="form-control" th:value="${member.sample6_address}">
+                    <input disabled="disabled" type="text" name="mypage" id="sample6_jibunAddress" class="form-control" th:value="${member.sample6_address}">
                 </div>
                 <div class="mb-3">
-                    <input type="text" id="sample6_detailAddress" class="form-control" th:value="${member.sample6_detailAddress}">
+                    <input disabled="disabled" type="text" name="mypage" id="sample6_detailAddress" class="form-control" th:value="${member.sample6_detailAddress}">
                 </div>
                 <div class="mb-3">
-                    <input type="text" id="sample6_extraAddress" class="form-control"th:value="${member.sample6_extraAddress}">
+                    <input disabled="disabled" type="text" id="sample6_extraAddress" class="form-control"th:value="${member.sample6_extraAddress}">
                 </div>
-                <button class="btn btn-primary" id="updateBtn" type="submit" style="float: right;">수정</button>
-                <button class="btn btn-secondary" style="float: right; margin-right: 10px;">취소</button>
+                <button class="btn btn-primary" id="updateBtn" style="float: right;">수정</button>
+                <button class="btn btn-primary" id="saveBtn" style="float: right;">저장</button>
+                <button class="btn btn-primary" id="cancelBtn" style="float: right;">취소</button>
+
             </form>
             
         </div>
     </main>
     <footer>
         <div class="footerForm">
+        
             <h1>footer 영역입니다. </h1>
         </div>
     </footer>
@@ -166,4 +225,5 @@
             }
         }).open();
     }
+    
 </script>
