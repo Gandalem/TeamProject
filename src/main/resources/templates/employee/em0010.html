@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <title>사원 등록 페이지</title>
+    <style>
+        .headerForm {
+            width: 100%;
+            height: 70px;
+            border: solid 1px black;
+        }
+        .footerForm {
+            width: 100%;
+            height: 70px;
+            border: solid 1px black;
+        }
+        .headerForm h1 {
+            text-align: center;
+        }
+        .footerForm h1 {
+            text-align: center;
+        }
+        .mainForm {
+            width: 100%;
+            height: 100%;
+            background-color: beige;
+        }
+        .search {
+            width: 100%;
+            height: 60px;
+            margin-left: 0 auto;
+            margin-right: 0 auto;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="headerForm">
+            <h1> 사원관리 페이지입니다. </h1>
+        </div>
+    </header>
+    <main>
+        <div class="mainForm" style="text-align: center;">
+            <div class="search">
+                <label style="margin-left: 100px;">회사명</label>
+                <select name="company" id="company" onchange="company();">
+                    <option value="">선택</option>
+                    <!-- <option value="samsung">삼성</option>
+                    <option value="apple">애플</option> -->
+                </select>
+                <label>부서명</label>
+                <select name="department" id="department" onchange="department();">
+                    <option value="">선택</option>
+                    <!-- <option value="management">경영팀</option>
+                    <option value="design">디자인팀</option>
+                    <option value="develop">개발팀</option> -->
+                </select>
+                <label>이름</label>
+                <select name="name" id="name">
+                    <option value="">선택</option>
+                    <!-- <option value="1">홍길동</option>
+                    <option value="2">이순신</option> -->
+                </select>
+                <button class="btn btn-primary" style="margin-left: 20px; margin-right: 100px;">조회하기</button>
+                <button class="btn btn-primary" style="width: 70px;">등록</button>
+            </div>
+            <div class="table-responsive">
+                <table id="employeeTable" class="table table-bordered" style="float: left; width: 100%; text-align: center;">
+                    <thead class="thead-light">
+                        <tr>
+                            <th><input name="select_all" value="1" type="checkbox"></th>
+                            <th>이름</th>
+                            <th>회사명</th>
+                            <th>부서명</th>
+                            <th>이메일 주소</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="footerForm">
+            <h1>footer 영역입니다. </h1>
+        </div>
+    </footer>
+</body>
+<script src="js/employee.js"></script>
+</html>

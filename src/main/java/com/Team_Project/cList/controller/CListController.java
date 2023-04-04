@@ -59,9 +59,6 @@ public class CListController {
 	@ResponseBody
 	public List<Department> dfindall(){
 		return dService.dfindall();
-	}
-	
-	
-	 
+	} 
 	
 }
