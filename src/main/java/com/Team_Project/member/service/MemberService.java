@@ -1,4 +1,4 @@
-package com.Team_Project.member.Service;
+package com.Team_Project.member.service;
 
 import org.springframework.stereotype.Service;
 

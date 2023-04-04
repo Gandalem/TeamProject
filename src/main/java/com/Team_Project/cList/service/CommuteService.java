@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.Team_Project.cList.repository.CommuteRepository;
 import com.Team_Project.entity.Commute;
-import com.Team_Project.entity.Member;
 
 import lombok.RequiredArgsConstructor;
 
@@ -46,10 +45,7 @@ public class CommuteService {
     }
     
     
-    //없앨까 생각중 commuteRepository와 연관
-//    public List<Commute> getCommuteByAuthor(Member author) {
-//        return commuteRepository.findByAuthor(author);
-//    }
+    
     
     
     

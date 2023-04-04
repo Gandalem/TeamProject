@@ -12,9 +12,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -40,6 +43,33 @@ public class Member implements UserDetails {
     private LocalDateTime updatedDate;
     private LocalDateTime deletedDate;
     private boolean deleted;
+    
+    
+    // 이름으로 부서가져오기1
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id")
+    private Department department;
+    
+    // 이름으로 부서가져오기2
+    public String getDepartmentName() {
+        if (department != null) {
+            return department.getDname();
+        }
+        return "";
+    }
+
+    // 이름으로 부서가져오기3
+    public String getCompanyName() {
+        if (department != null) {
+            Company company = department.getCompany();
+            if (company != null) {
+                return company.getCname();
+            }
+        }
+        return "";
+    }
+    
+    
 
     // 회원 타입 (관리자, 일반 유저)
     @Enumerated(EnumType.STRING)
