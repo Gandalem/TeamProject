@@ -15,6 +15,11 @@ public class EmployeeController {
 		return "employee/em0010";
 	}
 	
+	@GetMapping("/create")
+	public String Create() {
+		return "employee/em0020";
+	}
+	
 	//리스트 출력
 	@GetMapping("/List")
 	public String List() {
