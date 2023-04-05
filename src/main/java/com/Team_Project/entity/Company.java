@@ -3,6 +3,8 @@ package com.Team_Project.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.Team_Project.employee.Employee;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,7 +23,6 @@ public class Company extends BaseTimeEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "company_id")
 	private Long id;
 	
 	//회사이름

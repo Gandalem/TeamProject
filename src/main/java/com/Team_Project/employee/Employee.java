@@ -1,4 +1,7 @@
-package com.Team_Project.entity;
+package com.Team_Project.employee;
+
+import com.Team_Project.entity.Company;
+import com.Team_Project.entity.Department;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,10 +24,10 @@ public class Employee {
 	private String email;
 	
 	@ManyToOne
-	@JoinColumn(name = "company")
+	@JoinColumn(name = "company_Id")
 	private Company company;
 	
 	@ManyToOne
-	@JoinColumn(name = "department")
+	@JoinColumn(name = "department_Id")
 	private Department department;
 }

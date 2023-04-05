@@ -4,16 +4,14 @@
 	
 	//회사 목록
 	var table = $('#companyTable').DataTable({
-		dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
-				"<'row'<'col-sm-12'tr>>" +
-				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>B",
+		searching: false,
+		paging: false,
+		ordering: true,
+		info: false,
 		serverSide: true,
 		processing: true,
 		autoWidth : false,
-		paging : true,
-		info : true,
 		lengthChange : true,
-		pageLength : 20,
 		destroy: true,
 		ajax: {
 	    url: '/clist/posts',
@@ -47,8 +45,14 @@
 	        companyId = table.row(this).data().id;
 	        console.log('회사 Id', companyId);
 	        $('#departmentTable').DataTable({
+			searching: false,
+			paging: false,
+			ordering: true,
+			info: false,
 			serverSide: true,
 			processing: true,
+			autoWidth : false,
+			lengthChange : true,
 			destroy: true,
 			ajax: {
 				url: '/clist/getDepartments',
@@ -78,8 +82,14 @@
 	//부서 목록    
 	 var departmentTable = 
 	 $('#departmentTable').DataTable({
+		searching: false,
+		paging: false,
+		ordering: true,
+		info: false,
 		serverSide: true,
 		processing: true,
+		autoWidth : false,
+		lengthChange : true,
 		destroy: true,
 		ajax: {
 			url: '/clist/getDepartments_null',

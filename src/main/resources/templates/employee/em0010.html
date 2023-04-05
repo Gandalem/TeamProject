@@ -4,10 +4,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/common.css">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css"/>
     <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
     <title>사원 등록 페이지</title>
     <style>
         .headerForm {
@@ -62,12 +66,12 @@
                     <option value="develop">개발팀</option> -->
                 </select>
                 <label>이름</label>
-                <select name="name" id="name">
+                <select name="username" id="username">
                     <option value="">선택</option>
                     <!-- <option value="1">홍길동</option>
                     <option value="2">이순신</option> -->
                 </select>
-                <button class="btn btn-primary" style="width: 70px; margin-left: 20px; margin-right: 100px;">조회</button>
+                <button id="btnSearch" class="btn btn-primary" style="width: 70px; margin-left: 20px; margin-right: 100px;" disabled>조회</button>
                 <button class="btn btn-primary" style="width: 70px;" data-bs-toggle="modal" data-bs-target="#exampleModal">등록</button>
                 <button class="btn btn-warning" style="width: 70px;" disabled>삭제</button>
                 
