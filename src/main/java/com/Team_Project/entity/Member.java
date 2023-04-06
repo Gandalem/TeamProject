@@ -53,15 +53,11 @@ public class Member implements UserDetails {
     public void setMemberType(MemberType memberType) {
         this.memberType = memberType;
     }
-    @OneToMany
-    private List<Company> companyList;
+
     
     @ManyToOne
     @JoinColumn(name = "company_Id")
     private Company company;
-    
-    @OneToMany
-    private List<Department> departmentList;
     
     @ManyToOne
     @JoinColumn(name = "department_Id")
@@ -71,8 +67,6 @@ public class Member implements UserDetails {
     @JoinColumn(name ="employee_id")
     private Employee employee;
     
-    @OneToMany
-    private List<Employee> EmployeeList;
     
     @OneToMany
     private List<WorkLog> workLogList;

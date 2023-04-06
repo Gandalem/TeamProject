@@ -32,7 +32,5 @@ public class Employee {
 	@JoinColumn(name = "department_Id")
 	private Department department;
 	
-	@ManyToOne
-	private Member member;
 
 }
