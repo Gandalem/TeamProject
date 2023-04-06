@@ -1,0 +1,29 @@
+<html layout:decorate="~{layout}">
+	
+	<div layout:fragment="content" class = "container my-3" align = "right">
+		<div class="row my-3">
+			<div class="col-6">
+				<a th:href = "@{/worklog/worklog_create}" class = "btn btn-primary">근무 일지 등록</a>
+			</div>
+		</div>
+	<table border="1" class="table">
+		<thead class="table-dark">
+			<!-- 제목을 처리 -->
+			<tr>
+				<th>작성자</th>
+				<th style="width: 50%">제목</th>
+				<th>내용</th>
+				<th>작성일</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="workLog : ${workLogList}">
+				<td><span th:if="${workLog.member != null}" th:text="${workLog.member.name}"></span></td>
+				<td th:text="${workLog.title}"></td>
+				<td th:text="${workLog.content}"></td>
+				<td>[[${#temporals.format(workLog.createDate, 'yyyy-mm-dd hh:mm')}]]</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+</html>

@@ -69,9 +69,9 @@ public class MemberService {
         this.memberRepository.save(member);
     }
     
-    public Member getMemberById(Long id) {
-        return memberRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Invalid member Id:" + id));
+    public Member getMemberByEmail(String email) {
+        return memberRepository.findByEmail(email)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid member Id:" + email));
     }
 
 

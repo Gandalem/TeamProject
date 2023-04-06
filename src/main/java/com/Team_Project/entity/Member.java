@@ -4,17 +4,20 @@ package com.Team_Project.entity;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -41,13 +44,15 @@ public class Member implements UserDetails {
     private LocalDateTime deletedDate;
     private boolean deleted;
 
-    // 회원 타입 (관리자, 일반 유저)
     @Enumerated(EnumType.STRING)
     private MemberType memberType;
 
     public void setMemberType(MemberType memberType) {
         this.memberType = memberType;
     }
+    
+    @OneToMany(mappedBy = "member")
+    private List<WorkLog> workLogList;
     
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -84,18 +89,9 @@ public class Member implements UserDetails {
         return !deleted;
     }
 
-	public MemberType getMemberType() {
-    return this.memberType;
+    public boolean isAdmin() {
+        return memberType == MemberType.ADMIN;
+    }
 }
 
-	public boolean isPresent() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
-	public Member orElse(Object object) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-}

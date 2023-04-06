@@ -5,6 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,13 +46,7 @@ public class MypageController {
                                           @RequestParam("sample6_address") String sample6_address,
                                           @RequestParam("sample6_detailAddress") String sample6_detailAddress,
                                           @RequestParam("sample6_extraAddress") String sample6_extraAddress) {
-       
-    	System.out.println("id ==> : " + id);
-    	System.out.println("name ==> : " + name);
-    	System.out.println("email ==> : " + email);
-    	System.out.println("phoneNumber ==> : " + phoneNumber);
-    	
-    	
+
     	Member member = memberRepository.findById(id).orElseThrow(() -> new RuntimeException("Invalid id."));
         member.setName(name);
         member.setEmail(email);
@@ -69,10 +64,10 @@ public class MypageController {
         return mav;
     }
     
-    @GetMapping("/member/{id}")
+    @PostMapping("/member/{id}")
     @ResponseBody
-    public Member getMemberById(@PathVariable Long id) {
-        return memberService.getMemberById(id);
+    public Member getMemberByEmail(@PathVariable String email) {
+        return memberService.getMemberByEmail(email);
     }
 
 
