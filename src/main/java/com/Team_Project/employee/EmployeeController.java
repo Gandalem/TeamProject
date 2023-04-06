@@ -1,10 +1,14 @@
 package com.Team_Project.employee;
 
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,10 +48,29 @@ public class EmployeeController {
 		return employeeService.List();
 	}
 	
+	//이메일 체크
 	
-	@PostMapping("/emCreate")
+	@PostMapping("/emailCheck")
+	public ResponseEntity<Void> checkEmail(@RequestBody Map<String, String> request) {
+	    String email = request.get("email");
+	    if(employeeService.checkEmail(email) != null) {
+	        return ResponseEntity.status(HttpStatus.CONFLICT).build();
+	    }
+	    return ResponseEntity.ok().build();
+	}
+	
+	
+	//사원 등록
+	@PutMapping("/emCreate")
     public @ResponseBody Employee employeeCreate(@RequestBody Employee employee) {
 		return employeeService.createEmployee(employee);
     }
 	
+	//사원 삭제
+	/*
+	@DeleteMapping("/emDelete")
+	public void employeeDelete(@RequestBody Employee employee) {
+		this.employeeService.deleteEmployee(employee);	
+	}
+	*/
 }

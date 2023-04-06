@@ -10,6 +10,8 @@
     <link rel="stylesheet" type="text/css" href="css/common.css">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
     <title>사원 등록 페이지</title>
@@ -46,45 +48,38 @@
 <body>
     <header>
         <div class="headerForm">
-            <h1> 사원관리 페이지입니다. </h1>
+            <h1> 사원 관리 </h1>
         </div>
     </header>
     <main>
         <div class="mainForm" style="text-align: center;">
             <div class="search">
                 <label style="margin-left: 100px;">회사명</label>
-                <select name="company" id="company" onchange="company();">
+                <select style="min-width: 70px;" class="text-center" name="company" id="company" onchange="company();">
                     <option value="">선택</option>
-                    <!-- <option value="samsung">삼성</option>
-                    <option value="apple">애플</option> -->
                 </select>
                 <label>부서명</label>
-                <select name="department" id="department" onchange="department();">
+                <select style="min-width: 70px;" class="text-center" name="department" id="department" onchange="department();">
                     <option value="">선택</option>
-                    <!-- <option value="management">경영팀</option>
-                    <option value="design">디자인팀</option>
-                    <option value="develop">개발팀</option> -->
                 </select>
                 <label>이름</label>
-                <select name="username" id="username">
+                <select style="min-width: 70px;" class="text-center" name="username" id="username">
                     <option value="">선택</option>
-                    <!-- <option value="1">홍길동</option>
-                    <option value="2">이순신</option> -->
                 </select>
                 <button id="btnSearch" class="btn btn-primary" style="width: 70px; margin-left: 20px; margin-right: 100px;" disabled>조회</button>
                 <button class="btn btn-primary" style="width: 70px;" data-bs-toggle="modal" data-bs-target="#exampleModal">등록</button>
-                <button class="btn btn-warning" style="width: 70px;" disabled>삭제</button>
+                <button id="btnDelete" class="btn btn-warning" style="width: 70px;">삭제</button>
                 
             </div>
             <div class="table-responsive">
                 <table id="employeeTable" class="table table-bordered" style="float: left; width: 100%; text-align: center;">
                     <thead class="thead-light">
                         <tr>
-                            <th><input name="select_all" value="1" type="checkbox"></th>
-                            <th>회사명</th>
-                            <th>부서명</th>
-                            <th>이름</th>
-                            <th>이메일 주소</th>
+                            <th style="min-width: 10px;" class="text-center"><input id="select_all" name="check" type="checkbox"></th>
+                            <th style="min-width: 70px;" class="text-center">회사명</th>
+                            <th style="min-width: 70px;" class="text-center">부서명</th>
+                            <th style="min-width: 70px;" class="text-center">이름</th>
+                            <th style="min-width: 70px;" class="text-center">이메일 주소</th>
                         </tr>
                     </thead>
                 </table>
@@ -117,6 +112,7 @@
 		                </div>
 		                <div class="mb-3">
 		                    <input type="text" name="email" id="email" class="form-control" placeholder="이메일">
+		                    <button type="button" id="check-email" class="form-control">가입 확인</button>
 		                </div>
 		            </form>
 		        </div>
@@ -131,7 +127,7 @@
     </main>
     <footer>
         <div class="footerForm">
-            <h1>footer 영역입니다. </h1>
+            <h1>footer</h1>
         </div>
     </footer>
 </body>

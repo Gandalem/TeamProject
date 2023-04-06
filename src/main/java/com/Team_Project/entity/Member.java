@@ -10,8 +10,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.Team_Project.employee.Employee;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -62,10 +60,6 @@ public class Member implements UserDetails {
     @ManyToOne
     @JoinColumn(name = "department_Id")
     private Department department;
-    
-    @ManyToOne
-    @JoinColumn(name ="employee_id")
-    private Employee employee;
     
     
     @OneToMany

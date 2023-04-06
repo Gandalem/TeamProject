@@ -48,7 +48,6 @@ public class Company extends BaseTimeEntity {
 	private List<Employee> employeeId;
 	
 	@OneToMany
-	@JoinColumn(name = "member_Id")
 	private List<Member> memberId; 
 	
 	public Company() {
