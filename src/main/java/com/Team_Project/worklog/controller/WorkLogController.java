@@ -51,11 +51,11 @@ public class WorkLogController {
 		model.addAttribute("workLogList", workLogList);
 		return "worklog/worklog_list";
 	}
-	@GetMapping(value = "/worklog/detail/{id}")
+	@GetMapping(value = "/detail/{id}")
 	public String detail(Model model, @PathVariable("id") Long id) {
 		WorkLog workLog = this.workLogSerivce.getWorkLog(id);
 		model.addAttribute("workLog", workLog);
-		return "worklog_detail";
+		return "/worklog/worklog_detail";
 	}
 	
 }

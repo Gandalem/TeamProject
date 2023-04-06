@@ -18,6 +18,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -53,6 +54,24 @@ public class Member implements UserDetails {
     
     @OneToMany(mappedBy = "member")
     private List<WorkLog> workLogList;
+    
+    
+    @OneToOne
+   	private Company company;
+    
+    @OneToOne
+    private Department department;
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

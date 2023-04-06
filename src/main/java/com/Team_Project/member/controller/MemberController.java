@@ -83,28 +83,5 @@ public class MemberController {
             return ""; 
         }
     }
-
-
- 
-//    @PostMapping(value = "/register")
-//    public ResponseEntity<String> registerMember(@RequestBody MemberDTO memberDTO) {
-//        String email = memberDTO.getEmail();
-//        if (memberService.isEmailDuplicate(email)) {
-//            return new ResponseEntity<>("duplicate_email", HttpStatus.BAD_REQUEST);
-//        } else {
-//            Member member = new Member();
-//            member.setName(memberDTO.getName());
-//            member.setEmail(email);
-//            member.setPassword(memberDTO.getPassword());
-//            member.setSample6_postcode(memberDTO.getSample6_postcode());
-//            member.setSample6_address(memberDTO.getSample6_address());
-//            member.setSample6_detailAddress(memberDTO.getSample6_detailAddress());
-//            member.setSample6_extraAddress(memberDTO.getSample6_extraAddress());
-//            member.setMemberType(MemberType.EMPLOYEE);
-//            memberService.register(member);
-//            return new ResponseEntity<>("member_created", HttpStatus.OK);
-//        }
-//    }
-
     
 }
