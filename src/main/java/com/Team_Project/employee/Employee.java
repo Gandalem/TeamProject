@@ -2,6 +2,7 @@ package com.Team_Project.employee;
 
 import com.Team_Project.entity.Company;
 import com.Team_Project.entity.Department;
+import com.Team_Project.entity.Member;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,4 +31,8 @@ public class Employee {
 	@ManyToOne
 	@JoinColumn(name = "department_Id")
 	private Department department;
+	
+	@ManyToOne
+	private Member member;
+
 }

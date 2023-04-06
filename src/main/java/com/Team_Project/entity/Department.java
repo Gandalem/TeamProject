@@ -34,6 +34,9 @@ public class Department extends BaseTimeEntity {
 	@OneToMany
 	private List<Employee> employeeId;
 	
+	@OneToMany
+	@JoinColumn(name = "member_Id")
+	private List<Member> memberId; 
 	
 
 }

@@ -10,15 +10,17 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import jakarta.persistence.CascadeType;
+import com.Team_Project.employee.Employee;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -51,23 +53,29 @@ public class Member implements UserDetails {
     public void setMemberType(MemberType memberType) {
         this.memberType = memberType;
     }
+    @OneToMany
+    private List<Company> companyList;
     
-    @OneToMany(mappedBy = "member")
-    private List<WorkLog> workLogList;
+    @ManyToOne
+    @JoinColumn(name = "company_Id")
+    private Company company;
     
+    @OneToMany
+    private List<Department> departmentList;
     
-    @OneToOne
-   	private Company company;
-    
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "department_Id")
     private Department department;
     
+    @ManyToOne
+    @JoinColumn(name ="employee_id")
+    private Employee employee;
     
+    @OneToMany
+    private List<Employee> EmployeeList;
     
-    
-    
-    
-    
+    @OneToMany
+    private List<WorkLog> workLogList;
     
     
     
