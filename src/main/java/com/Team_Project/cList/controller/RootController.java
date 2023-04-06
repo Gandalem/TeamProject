@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 import com.Team_Project.cList.service.CommuteService;
+import com.Team_Project.entity.Member;
 import com.Team_Project.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -23,20 +24,23 @@ public class RootController {
 //	@PreAuthorize("isAuthenticated()")
 	@GetMapping(value = "/")
 	public String root(Model model, Principal principal) {
-//	    String email = principal.getName();
-//
-//	    // 사용자 정보 가져오기
-//	    Optional<Member> memberOptional = memberRepository.findByEmail(email);
-//	    
-//	    // Optional 언래핑
-//	    Member member = memberOptional.orElse(null);
-//	    
-//	    // 사용자 정보가 존재하면, 모델에 이름, 부서, 회사 추가
-//	    if (member != null) {
-//	        model.addAttribute("name", member.getName());
-//	        model.addAttribute("departmentName", member.getDepartmentName());
-//	        model.addAttribute("companyName", member.getCompanyName());
-//	    }
+	    String email = principal.getName();
+
+	    // 사용자 정보 가져오기
+	    Optional<Member> memberOptional = memberRepository.findByEmail(email);
+	    
+	    // Optional 언래핑
+	    Member member = memberOptional.orElse(null);
+	    
+	    // 사용자 정보가 존재하면, 모델에 이름, 부서, 회사 추가
+	    if (member != null) {
+	        model.addAttribute("name", member.getName());
+	        if (member.getDepartment() != null) {
+	            model.addAttribute("departmentName", member.getDepartment().getDname());
+	        } else {
+	            model.addAttribute("departmentName", "-");
+	        }
+	    }
 	    
 	    return "main/main";
 	}

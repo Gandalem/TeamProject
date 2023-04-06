@@ -11,11 +11,14 @@
             padding:20px;
         }
 
-        .sel{
-            width:100px;height:30px;
+        .form-select{
+            width:120px;height:35px;
+            float:left;
+            margin:10px;
         }
-        .bu1{
-            width:80px; height:30px;
+        #bu1{
+            width:100px; height:35px;
+            margin:10px;
         }
 
 

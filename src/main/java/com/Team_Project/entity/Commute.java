@@ -28,15 +28,10 @@ public class Commute {
 	// 오늘 날짜
 	private LocalDateTime today;
 	
-	// author
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "member_id")
-//	private Member author;
-	
-	
-	
-	
-	
+	// 어느 회원이 출,퇴근했는지
+	@ManyToOne
+	@JoinColumn(name = "employee")
+	private Employee employee;
 	
 
 }

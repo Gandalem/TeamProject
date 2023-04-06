@@ -1,5 +1,6 @@
 package com.Team_Project.cList.controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -26,13 +27,24 @@ public class CommuteController {
 	
 	// DB에 출근시간저장
 	@PostMapping(value = "/commute/start")
-	public void saveWorkStart(@RequestParam(name = "workStart") String workStart) {
-		try {
-	    commuteService.saveWorkStart(workStart);
-		}catch(Exception e) {
-			
-		}
+	public void saveWorkStart(@RequestParam(name = "workStart") String workStart, @RequestParam(name="today") String today) {
+	    try {
+	        // 날짜 문자열을 LocalDateTime으로 변환
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d");
+	        LocalDateTime todayDate = LocalDate.parse(today, formatter).atStartOfDay();
+
+	        // Commute 객체 생성 및 데이터 설정
+	        Commute commute = new Commute();
+	        commute.setWorkStart(LocalDateTime.parse(workStart, DateTimeFormatter.ofPattern("yyyy년 M월 d일 H시 m분 s초")));
+	        commute.setToday(todayDate);
+
+	        // Commute 객체 저장
+	        commuteService.saveCommute(commute);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
+	
 	// DB에 퇴근시간저장
 	@PostMapping(value = "/commute/end")
 	public void saveWorkEnd(@RequestParam(name = "workEnd") String workEnd) {
@@ -68,16 +80,6 @@ public class CommuteController {
 		String formattedWorkEnd = commute.getWorkEnd().format(formatter);
 		return formattedWorkEnd;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	

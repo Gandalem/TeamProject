@@ -1,12 +1,12 @@
 package com.Team_Project.attendence;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
-import com.Team_Project.cList.service.CListService;
-import com.Team_Project.entity.Company;
+import com.Team_Project.cList.repository.CommuteRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,6 +14,31 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AttendenceService {
 	
-
+	private final CommuteRepository commuteRepository;
+	
+	// DB의 today의 리스트에서 년도만 빼서 넣기
+    public List<Integer> getYearsByEmployeeIdx(Long employeeIdx) {
+        List<LocalDateTime> todayList = commuteRepository.findTodayByEmployeeIdx(employeeIdx);
+        return todayList.stream()
+                .map(today -> today.getYear())
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+    }
+    
+    // DB의 today의 리스트에서 월만 빼서 넣기
+    public List<Integer> getMonthsByEmployeeIdxAndYear(Long employeeIdx, Integer year) {
+        List<LocalDateTime> todayList = commuteRepository.findTodayByEmployeeIdx(employeeIdx);
+        return todayList.stream()
+                .filter(today -> today.getYear() == year)
+                .map(today -> today.getMonthValue())
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+    }
+    
+    
+    
+    
 
 }

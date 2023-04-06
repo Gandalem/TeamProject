@@ -12,22 +12,23 @@
 	<div class="at_odiv">
 		<div class="at_div1">
 			<form>
-				<select class="sel" id="company" name="company" onchange="ccompany();">
+				<select class="form-select" id="company" name="company" onchange="ccompany();">
 					<option>회사선택</option>
 				</select>
-				<select class="sel" id="department" name="department" onchange="ddepartment();">
+				<select class="form-select" id="department" name="department" onchange="ddepartment();">
 					<option>부서선택</option>
 				</select>
-				<select class="sel" id="name" name="name" onchange="nname();">
+				<select class="form-select" id="name" name="name" onchange="nname();">
 					<option>이름선택</option>
 				</select>
-                <select class="sel" id="year" name="year">
+                <select class="form-select" id="year" name="year">
                     <option>년도</option>
                 </select>
-                <select class="sel" id="month" name="month">
+                <select class="form-select" id="month" name="month">
                     <option>월</option>
                 </select>
-				<button class="bu1"> 조회하기 </button>
+				<button class="btn btn-secondary" id="bu1" onclick="searchAttendance();"> 조회하기 </button>
+				
 			</form>
 		</div>
 
@@ -60,7 +61,7 @@
 	
 	<script>
 
-	// 회사선택
+	// 회사리스트
 	$(document).ready(function(){
 		$.ajax({
 			url: "/atten/com",
@@ -73,7 +74,7 @@
 			}
 		});
 	});
-	// 부서선택
+	// 회사선택
 	function ccompany(){
 		var companyId = $("#company option:selected").val();
 		console.log(companyId);
@@ -93,10 +94,12 @@
 			}
 		});
 	}
-	// 이름선택
+	// 부서선택
 	function ddepartment(){
+		// 부서선택시
 		var departmentId = $("#department option:selected").val();
 		console.log(departmentId);
+		// ajax로 전송
 		$.ajax({
 			url: "/atten/na",
 			method:"GET",
@@ -106,15 +109,91 @@
 			    $("#name").empty();
 			    $("#name").append('<option>이름선택</option>');
 			    for(i=0;i<res.length;i++){
-			        $("#name").append('<option value="'+res[i].id+'">'+res[i].name+'</option>');
+			        $("#name").append('<option value="'+res[i].idx+'">'+res[i].name+'</option>');
+			        	// **res[i].idx를 res[i].id로 해서 undefined오류 발생함(시간 많이 잡아먹음)**
 			    }
 			}
 		});
 	}
+
+
+	// 이름선택시
+	function nname() {
+	    var employeeIdx = $("#name option:selected").val();
+	    console.log(employeeIdx);
+	
+	    $.ajax({
+	        url: "/atten/years",
+	        method: "GET",
+	        dataType: "json",
+	        data: { employeeIdx: employeeIdx}, // 변경된 변수 이름을 사용하여 data를 설정
+	        
+	        success: function(res) {
+	            $("#year").empty();
+	            $("#year").append('<option>년도</option>');
+
+	            for (i=0;i<res.length;i++) {
+	                $("#year").append('<option value="'+res[i]+'">'+res[i]+'</option>');
+	            }
+	        },
+	    });
+
+	    $("#year").change(function() {
+	        var year = $("#year option:selected").val();
+	        console.log(year);
+
+	        $.ajax({
+	            url: "/atten/months",
+	            method: "GET",
+	            dataType: "json",
+	            data: {
+	                employeeIdx: employeeIdx,
+	                year: year,
+	            },
+	            success: function(res) {
+	                $("#month").empty();
+	                $("#month").append('<option>월</option>');
+
+	                for (i=0;i<res.length;i++) {
+	                    $("#month").append('<option value="'+res[i]+'">'+res[i]+'</option>');
+	                }
+	            },
+	        });
+	    });
+	    
+	    $("#month").change(function(){
+	    	var month = $("#month option:selected").val();
+	    	console.log(month);
+	    });
+	}   
+
+	
+	
+	function searchAttendance(){
+		var companyId = $("#company option:selected").val();
+		var departmentId = $("#department option:selected").val();
+		var employeeIdx = $("#name option:selected").val();
+		var year = $("#year option:selected").val();
+		var month = $("#month option:selected").val();
+		
+		console.log(companyId);
+		console.log(departmentId);
+		console.log(employeeIdx);
+		console.log(year);
+		console.log(month);
+	}
+	
+
 	
 	
 	
 	
+	
+	
+	
+	
+	
+
 	
 </script>
 </body>

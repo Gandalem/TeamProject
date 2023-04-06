@@ -1,6 +1,7 @@
 package com.Team_Project.cList.service;
 
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.Team_Project.cList.repository.CommuteRepository;
 import com.Team_Project.entity.Commute;
+import com.Team_Project.entity.Member;
 
 import lombok.RequiredArgsConstructor;
 
@@ -44,20 +46,10 @@ public class CommuteService {
         return commuteRepository.findFirstByOrderByIdxDesc();
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    // 현재시간 DB에 저장
+    public void saveCommute(Commute commute) {
+        commuteRepository.save(commute);
+    }
     
 
 }

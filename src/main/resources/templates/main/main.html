@@ -1,7 +1,11 @@
 
 <html layout:decorate="~{layout}">
 <div layout:fragment="content">
-
+	
+	<a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}">로그인</a>
+	<a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a>
+	
+	
     <div class="index_outdiv">
         <form>
 
@@ -61,6 +65,15 @@
             // 페이지 로드시 현재시간 함수 호출
             nDate();
         });
+        
+        
+     	// 현재 날짜를 저장
+        var currentDay = new Date();
+        var currentYear = currentDay.getFullYear();
+        var currentMonth = currentDay.getMonth() + 1;
+        var currentDay = currentDay.getDate();
+        var currentDate = currentYear + "-" + currentMonth + '-' + currentDay;
+
 
 		// 출근 버튼 클릭시 현재 시간 함수 등록
 		$("#gw").click(function() {
@@ -83,25 +96,23 @@
 			var token = $("meta[name='_csrf']").attr("content");
 	        var header = $("meta[name='_csrf_header']").attr("content");
 	         
-			$.ajax({
-			    type: "POST",
-			    url: "/commute/start",
-			    
-			    // 추가
-			    beforeSend : function(xhr) {
-		             xhr.setRequestHeader(header, token);
-		            },
-			    
-		        data: {
-			        workStart: startTime
-			    },
-			    success: function(data) {
-			        console.log(data);
-			    },
-			    error: function() {
-			        console.log("에러 발생");
-			    }
-			});
+	        $.ajax({
+	            type: "POST",
+	            url: "/commute/start",
+	            beforeSend: function(xhr) {
+	                xhr.setRequestHeader(header, token);
+	            },
+	            data: {
+	                workStart: startTime,
+	                today: currentDate
+	            },
+	            success: function(data) {
+	                console.log(data);
+	            },
+	            error: function() {
+	                console.log("에러 발생");
+	            }
+	        });
 			
 			// 새로고침 하면서 출근시간 표시하기
 			alert("출근이 완료되었습니다. \n 출근시간 : " + startTime);

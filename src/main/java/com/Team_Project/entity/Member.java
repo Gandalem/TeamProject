@@ -49,24 +49,9 @@ public class Member implements UserDetails {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id")
     private Department department;
-    
     // 이름으로 부서가져오기2
-    public String getDepartmentName() {
-        if (department != null) {
-            return department.getDname();
-        }
-        return "";
-    }
-
-    // 이름으로 부서가져오기3
-    public String getCompanyName() {
-        if (department != null) {
-            Company company = department.getCompany();
-            if (company != null) {
-                return company.getCname();
-            }
-        }
-        return "";
+    public Department getDepartment() {
+        return department;
     }
     
     
