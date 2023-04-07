@@ -72,6 +72,12 @@
 					$("#company").append('<option value="'+res[i].id+'">'+res[i].cname+'</option>');
 				}
 			}
+			/*
+			,
+			error:function(request, status, error){
+				console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			}
+			*/
 		});
 	});
 	// 회사선택
@@ -181,6 +187,43 @@
 		console.log(employeeIdx);
 		console.log(year);
 		console.log(month);
+		
+		//기존의 행 제거
+		$(".commute-row").remove;
+		
+		
+		$.ajax({
+			url:"/atten/search",
+			method:"GET",
+			dataType:"json",
+			data:{
+				companyId:companyId,
+				departmentId:departmentId,
+				employeeIdx:employeeIdx,
+				year:year,
+				month:month
+			},
+			success: function(res){
+				for(var i=0;i<res.length;i++){
+					var commute = res[i];
+					var rec = '<tr class="commute-row">' +
+                    '<td class="td1">' + commute.today + '</td>' +
+                    '<td class="td2">' + commute.workStart + '</td>' +
+                    '<td class="td3"></td>' +
+                    '<td class="td2">' + commute.workEnd + '</td>' +
+                    '<td class="td3"></td>' +
+                    '<td class="t4">비고</td>' +
+                    '</tr>';
+                    
+					$(".table").append(rec);	
+				};
+			},
+			error:function(request, status, error){
+
+				console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+
+			}
+		});
 	}
 	
 

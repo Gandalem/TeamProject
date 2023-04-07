@@ -58,8 +58,8 @@
     	        });
     	    });
     	    $.ajax({
-    	        type: "GET",
-    	        url: "/member/" + memberId,
+    	        type: "POST",
+    	        url: "/member/" + encodeURIComponent(memberId),
     	        success: function(member) {
     	            $("#name").val(member.name).prop("disabled", true);
     	            $("#email").val(member.email).prop("disabled", true);
@@ -76,7 +76,7 @@
     	        },
 
     	        error: function(e) {
-    	            console.log("Error retrieving member information: " + e);
+    	        	console.log("Error retrieving member information: " + e);
     	        },
     	        complete: function() {
     	            // 취소 버튼 클릭 시 이동할 URL

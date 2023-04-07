@@ -25,8 +25,4 @@ public class CListService {
 		return cListRepository.save(company);
 	}
 	
-	public Optional<Company> findcid(Long id){
-		return cListRepository.findCompanyById(id);
-	}
-	
 }

@@ -30,15 +30,14 @@ public class CommuteService {
 
     // 메인페이지에서 퇴근버튼 클릭시 DB에 저장
     public void saveWorkEnd(String endTime) {
-        List<Commute> commutes = commuteRepository.findAll();
-        // 리스트의 마지막 레코드를 가져오기
-        Commute commute = commutes.get(commutes.size() - 1);
+        Commute commute = commuteRepository.findFirstByOrderByIdxDesc();
+        if (commute == null) {
+            return;
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일 H시 m분 s초");
-
         LocalDateTime workEndDateTime = LocalDateTime.parse(endTime, formatter);
         commute.setWorkEnd(workEndDateTime);
         commuteRepository.save(commute);
-    	    
     }
 
     // DB에 저장된 출, 퇴근 시간 리스트 가져오기

@@ -19,7 +19,6 @@ public class Department extends BaseTimeEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "department_id")
 	private Long id;
 	
 	//부서이름
@@ -27,7 +26,7 @@ public class Department extends BaseTimeEntity {
 	
 	//회사idx
 	@ManyToOne
-	@JoinColumn(name = "company")
+	@JoinColumn(name = "company_Id")
 	private Company company;
 	
 	@OneToMany

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  </head>
+  <body>
+    <div layout:fragment="content" class="container">
+      <h5 class="my-3 border-bottom pb-2">근무 일지 등록</h5>
+      <form th:action="@{/worklog/worklog_create}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <!-- 오류 메시지 출력 부분 -->
+        <!-- 외부 파일에서 import -->
+        <div class="mb-3">
+          <label for="title" class="form-label">제목</label>
+          <input type="text"  name="title" id="title" class="form-control">
+        </div>
+        <div class="mb-3">
+          <label for="content" class="form-label">내용</label>
+          <textarea name="content" id="content" class="form-control" rows="10"></textarea>
+        </div>
+        <input type="submit" value="저장하기" class="btn btn-primary my-2">
+      </form>
+    </div>
+  </body>
+</html>

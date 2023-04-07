@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -59,17 +60,30 @@ public class AttendenceController {
 	    List<Employee> employee = employeeService.getEmployeesByDepartmentId(departmentId);
 	    return employee;
 	}
-	// 
+	// 년도와 월에 해당하는 리스트 가져오기
     @GetMapping("/atten/years")
     @ResponseBody
     public List<Integer> getYears(@RequestParam("employeeIdx") Long employeeIdx) {
         return attendenceService.getYearsByEmployeeIdx(employeeIdx);
     }
-
     @GetMapping("/atten/months")
     @ResponseBody
     public List<Integer> getMonths(@RequestParam("employeeIdx") Long employeeIdx, @RequestParam("year") Integer year) {
         return attendenceService.getMonthsByEmployeeIdxAndYear(employeeIdx, year);
+    }
+    
+    
+    // 조회버튼
+    @GetMapping(value = "/atten/search")
+    @ResponseBody
+    public List<Commute> getCommuteList(
+    	     @RequestParam("companyId") Long companyId,
+             @RequestParam("departmentId") Long departmentId,
+             @RequestParam("employeeIdx") Long employeeIdx,
+             @RequestParam("year") Integer year,
+             @RequestParam("month") Integer month
+    		){
+    	return 
     }
 	
 	

@@ -33,7 +33,7 @@ public class SecurityConfig {
          .headers()
          .addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN));
        
-      
+      //http.csrf().disable();
       
        
       // 03-10 로그인처리

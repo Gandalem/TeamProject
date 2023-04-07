@@ -22,10 +22,10 @@ public class Employee {
 	private String email;
 	
 	@ManyToOne
-	@JoinColumn(name = "company")
+	@JoinColumn(name = "company_Id")
 	private Company company;
 	
 	@ManyToOne
-	@JoinColumn(name = "department")
+	@JoinColumn(name = "department_Id")
 	private Department department;
 }

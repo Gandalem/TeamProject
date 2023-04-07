@@ -21,7 +21,6 @@ public class Company extends BaseTimeEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "company_id")
 	private Long id;
 	
 	//회사이름

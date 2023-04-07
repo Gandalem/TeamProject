@@ -16,16 +16,29 @@ import lombok.Data;
 @Table(name = "work_logs")
 @Data
 public class WorkLog {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id")
-    private Member author;
-
     private String title;
+
     private String content;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
+    private LocalDateTime createDate;
+
+    private LocalDateTime modifyDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+    
+    public Long getMemberId() {
+        return member.getId();
+    }
+    
+    public String getMemberName() {
+        return member.getName();
+    }
+    
 }
