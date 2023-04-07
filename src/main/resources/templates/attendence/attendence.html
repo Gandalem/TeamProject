@@ -2,6 +2,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 <title>출.퇴근 관리</title>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
@@ -27,42 +31,40 @@
 				<select class="form-select" id="name" name="name" onchange="nname();">
 					<option>이름선택</option>
 				</select>
-				<!-- 
 				<div>
-					<input type="date">
+					<input type="date" id="date">
 				</div>
-				 -->
-                <select class="form-select" id="year" name="year">
-                    <option>년도</option>
-                </select>
-                <select class="form-select" id="month" name="month">
-                    <option>월</option>
-                </select>
-				<button class="btn btn-secondary" id="bu1" type="button"> 조회하기 </button>				
+
+				<button class="btn btn-secondary" id="bu1" type="button"> 조회하기 </button>
+				
+				<button type="button" class="btn btn-dark" id="bu2" onclick="saveNotes();">저장하기</button>
 			</form>
 		</div>
-
+		
+		
+		
         <div class="at_div2">
             <div class="at_div2_div1">
                 <table class="table" id="attendanceTable">
                 	<thead>
 	                    <tr>
+	                    	<th class="ttt"><input id="remark" name="check" type="checkbox"></th>
 	                    	<th class="th1">요일</th>
-	                        <th class="th2" colspan="4">출, 퇴근 시간</th>
+	                    	<th class=ttt1>출근시간</th>
+	                    	<th class=ttt1>퇴근시간</th>
 	                        <th class="th3">비고란</th>
 	                    </tr>
                     </thead>
-                    <tbody>
-	                    <tr>
-	                    	<td class="td1"></td>
-	                    	<td class="td2">출근</td>
-	                        <td class="td3"></td>
-	                        <td class="td2">퇴근</td>
-	                        <td class="td3"></td>
-	                        <!-- 비고란 -->
-	                        <td class="td4">비고</td>
-	                    </tr>
-                    </tbody>
+						<tbody>
+							<tr>
+								<td class="ttt"></td>
+							    <td class="td1"></td>
+							    <td class="ttt1"></td>
+							    <td class="ttt1"></td>
+							    <!-- 비고란 -->
+							    <td class="td4"></td>
+							</tr>
+						</tbody>
                 </table>
             </div>
 
@@ -73,6 +75,7 @@
 	
 	<script>
 
+	
 	// 회사리스트
 	$(document).ready(function(){
 		$.ajax({
@@ -95,6 +98,7 @@
 	// 회사선택
 	function ccompany(){
 		var companyId = $("#company option:selected").val();
+		console.log(companyId);
 		$.ajax({
 			url: "/clist/getDepartments",
 			method:"GET",
@@ -133,18 +137,20 @@
 			}
 		});
 	}
-
-
 	// 이름선택시
 	function nname() {
+		var companyId = $("#company option:selected").val();
 	    var employeeIdx = $("#name option:selected").val();
+	    console.log(companyId);
 	    console.log(employeeIdx);
-	
+	/*
 	    $.ajax({
 	        url: "/atten/years",
 	        method: "GET",
 	        dataType: "json",
-	        data: { employeeIdx: employeeIdx}, // 변경된 변수 이름을 사용하여 data를 설정
+	        data: { 
+	        	companyId:companyId,
+	        	employeeIdx: employeeIdx}, // 변경된 변수 이름을 사용하여 data를 설정
 	        
 	        success: function(res) {
 	            $("#year").empty();
@@ -155,68 +161,147 @@
 	            }
 	        },
 	    });
-
-	    $("#year").change(function() {
-	        var year = $("#year option:selected").val();
-	        console.log(year);
-
-	        $.ajax({
-	            url: "/atten/months",
-	            method: "GET",
-	            dataType: "json",
-	            data: {
-	                employeeIdx: employeeIdx,
-	                year: year,
-	            },
-	            success: function(res) {
-	                $("#month").empty();
-	                $("#month").append('<option>월</option>');
-
-	                for (i=0;i<res.length;i++) {
-	                    $("#month").append('<option value="'+res[i]+'">'+res[i]+'</option>');
-	                }
-	            },
-	        });
-	    });
-	    
-	    $("#month").change(function(){
-	    	var month = $("#month option:selected").val();
-	    	console.log(month);
-	    });
+	*/
 	}   
-
 	
-	
-	// 이 부분을 수정하여 DataTables를 초기화하고 데이터를 불러옵니다.
+	// 조회하기
 	$("#bu1").click(function(){
 		var companyId = $("#company option:selected").val();
 		var departmentId = $("#department option:selected").val();
 		var employeeIdx = $("#name option:selected").val();
-		var year = $("#year option:selected").val();
-		var month = $("#month option:selected").val();
+		var Date = $("#date").val();
 		
+		var Year = Date.split("-")[0];
+		var Month = Date.split("-")[1];
+		console.log(Year);
 		
-		
-		
+		$.ajax({
+			url: "/atten/search",
+			method: "GET",
+			dataType: "json",
+			data:{
+				companyId:companyId,
+				departmentId:departmentId,
+				employeeIdx:employeeIdx,
+				year:Year,
+				month:Month
+			},
+			success:function(res){
+	            $('#attendanceTable tbody').empty();
+
+	            for (var i = 0; i < res.length; i++) {
+	                var row = '<tr data-id="' + res[i].idx + '">';
+	                row += '<td class="ttt"><input type="checkbox" name="check"></td>';
+	                row += '<td class="td1">' + res[i].today + '</td>';
+	                row += '<td class="ttt1">' + res[i].workStart + '</td>';
+	                row += '<td class="ttt1">' + res[i].workEnd + '</td>';
+	                row += '<td class="td4"><input type="text"class="form-control remark-input"value="'+res[i].note+'"></td>';
+	                row += '</tr>';
+
+	                $('#attendanceTable tbody').append(row);
+	                // 모든 check box 비활성화
+	                $('.remark-input').prop('disabled', true);
+	            }
+			}
+		});
 	});
 	
-	var table = $('#attendanceTable').DataTable({
-		searching: false,
-		paging: false,
-		ordering: true,
-		info: false,
-		serverSide: true,
-		processing: true,
-		destroy: true,
-		ajax: {
-			url: '/atten/search',
-		    type: 'GET',
-		    dataSrc: '',
-		},
-		columns: [
-			{ data: 'today' }
-	 	]	  	
+	
+	// 제일 위의 체크박스를 클릭시
+	$("#remark").click(function() {
+		var checked = $("#remark").is(':checked');
+	    if(checked){
+	    	$('input:checkbox').prop('checked', true);
+	    	$(".remark-input").prop("disabled", false);
+	    }else{
+	    	$('input:checkbox').prop('checked', false);
+	    	$(".remark-input").prop("disabled", true);
+	    }
 	});
+	
+	// 개별 체크박스 클릭시 그에 맞는 text 선택
+	$(document).on('click', 'input[name="check"]', function() {
+    var isChecked = $(this).is(':checked');
+    $(this).closest('tr').find('.remark-input').prop('disabled', !isChecked);
+	});
+	
+	
+	// 페이지 로드시 DB의 값 출력
+	$(document).ready(function(){
+	    loadCommuteData();
+	});
+	
+	function loadCommuteData() {
+	    $.ajax({
+	        url: '/atten/list',
+	        method: 'GET',
+	        dataType: 'json',
+	        success: function(res){
+	            $('#attendanceTable tbody').empty();
+	            for(var i=0; i<res.length; i++) {
+	                var row = '<tr data-id="' + res[i].idx + '">';
+	                row += '<td class="ttt"><input type="checkbox" name="check"></td>';
+	                row += '<td class="td1">' + res[i].today + '</td>';
+	                row += '<td class="ttt1">' + res[i].workStart + '</td>';
+	                row += '<td class="ttt1">' + res[i].workEnd + '</td>';
+	                row += '<td class="td4"><input type="text"class="form-control remark-input"value="'+res[i].note+'"></td>';
+	                row += '</tr>';
+
+	                $('#attendanceTable tbody').append(row);
+	                //모든 check box 비활성화
+	                $('.remark-input').prop('disabled', true);
+	            }
+	        },
+	        error: function(request, status, error){
+	            console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+	        }
+	    });
+	}
+	
+	
+	// 체크박스 disable이면 저장
+	function saveNotes() {
+		console.log("함수호출");
+	    // 체크된 체크박스와 해당하는 비고란의 값을 가져옵니다.
+	    var checkedRows = $('input[name="check"]:checked').closest('tr');
+	    
+	    // 각 체크된 행에 대해 데이터를 저장합니다.
+	    checkedRows.each(function() {
+	        var row = $(this);
+	        var idx = row.data('id');
+	        var note = row.find('.remark-input').val();
+	        
+			var token = $("meta[name='_csrf']").attr("content");
+	        var header = $("meta[name='_csrf_header']").attr("content");
+	        if(token && header) {
+	            $(document).ajaxSend(function(event, xhr, options) {
+	                xhr.setRequestHeader(header, token);
+	            });
+	        }
+	        
+	        // 저장할 데이터를 서버에 전송합니다.
+	        $.ajax({
+	            url: '/atten/saveNote',
+		        beforeSend : function(xhr) {
+		            xhr.setRequestHeader(header, token);
+		        },
+	            method: 'POST',
+	            dataType: 'json',
+	            data: {
+	                idx: idx,
+	                note: note
+	            },
+	            success: function(res) {
+	                alert("비고란을 수정했습니다.");
+	            }
+	        });
+	    });
+	}
+		
+
+
+
+	
 
 </script>
 </body>

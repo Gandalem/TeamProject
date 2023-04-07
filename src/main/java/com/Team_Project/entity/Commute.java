@@ -31,6 +31,9 @@ public class Commute {
 	// 오늘 날짜
 	private LocalDateTime today;
 	
+	// 비고
+	private String note;
+	
 	// 어느 회원이 출,퇴근했는지
 	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)

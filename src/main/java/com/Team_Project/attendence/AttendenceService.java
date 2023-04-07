@@ -1,9 +1,12 @@
 package com.Team_Project.attendence;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -16,36 +19,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AttendenceService {
 	
-	private final CommuteRepository commuteRepository;
-	private final AttendenceRepository AttendenceRepository;
-	
-	// DB의 today의 리스트에서 년도만 빼서 넣기
-    public List<Integer> getYearsByEmployeeIdx(Long employeeIdx) {
-        List<LocalDateTime> todayList = commuteRepository.findTodayByEmployeeIdx(employeeIdx);
-        return todayList.stream()
-                .map(today -> today.getYear())
-                .distinct()
-                .sorted()
-                .collect(Collectors.toList());
-    }
+	private final AttendenceRepository attendenceRepository;
     
-    // DB의 today의 리스트에서 월만 빼서 넣기
-    public List<Integer> getMonthsByEmployeeIdxAndYear(Long employeeIdx, Integer year) {
-        List<LocalDateTime> todayList = commuteRepository.findTodayByEmployeeIdx(employeeIdx);
-        return todayList.stream()
-                .filter(today -> today.getYear() == year)
-                	//위의 filter는 해당하는 년도에 대한 월을 가져오기 위한 코드
-                .map(today -> today.getMonthValue())
-                .distinct()
-                .sorted()
-                .collect(Collectors.toList());
-
-    }
-    
-    
+    // commute의 모든 내용 가져오기
     public List<Commute> allList() {
-        return AttendenceRepository.findAllBy();
+        return attendenceRepository.findAllBy();
     }
     
+    
+    
+    
+    public List<Commute> searchAttendance(Long companyId, Long departmentId, Long employeeIdx, int year, int month) {
+        return attendenceRepository.findByCompanyIdAndDepartmentIdAndEmployeeIdxAndYearAndMonth(companyId, departmentId, employeeIdx, year, month);
+    }
+
 
 }

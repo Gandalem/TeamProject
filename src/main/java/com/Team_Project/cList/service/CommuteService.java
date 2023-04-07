@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -51,4 +52,11 @@ public class CommuteService {
     }
     
 
+    // DB에 저장
+    public Commute saveNote(Long idx, String note) {
+        Commute commute = commuteRepository.findById(idx)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid commute id: " + idx));
+        commute.setNote(note);
+        return commuteRepository.save(commute);
+    }
 }

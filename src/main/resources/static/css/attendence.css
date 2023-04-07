@@ -35,24 +35,25 @@
 			text-align:center;
 		}
         .th1{
-            width:15%;
+            width:20%;
         }
-        .th2{
-            width:55%;
+        .ttt1{
+            width:25%;
+            border:1px solid black;
+        }
+        .ttt{
+        	width:10%;
         }
         .th3{
-        	width:30%;
+        	width:20%;
         }
         .table{
             width:100%;
             border:1px solid black;
         }
         
-        .td1, .td2{
-        	border:1px solid black;
-        	
-        }
         .td1{
+        	border:1px solid black;
         	width:15%;
         	
         }
@@ -65,4 +66,9 @@
 		}
 		.td4{
 			width:30%;
+		}
+		
+		#remark{
+			width:20px;
+			height:20px;
 		}
