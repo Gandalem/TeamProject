@@ -52,7 +52,7 @@ public class MemberController {
         member.setPhoneNumber(memberDTO.getPhoneNumber());
         member.setMemberType(MemberType.ADMIN);
         memberService.register(member);
-        return "redirect:/"; // 회원가입 완료 페이지로 이동
+        return "redirect:/login"; // 회원가입 완료 페이지로 이동
     }
 
 
@@ -71,7 +71,7 @@ public class MemberController {
         member.setPhoneNumber(memberDTO.getPhoneNumber());
         member.setMemberType(MemberType.EMPLOYEE);
         memberService.register(member);
-        return "redirect:/"; // 회원가입 완료 페이지로 이동
+        return "redirect:/login"; // 회원가입 완료 페이지로 이동
     }
 
     @PostMapping(value = "/checkEmail")
