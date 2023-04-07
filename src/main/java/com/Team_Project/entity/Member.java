@@ -10,7 +10,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -48,15 +47,6 @@ public class Member implements UserDetails {
     private boolean deleted;
     
     
-    // 이름으로 부서가져오기1
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "department_id")
-    private Department department;
-    // 이름으로 부서가져오기2
-    public Department getDepartment() {
-        return department;
-    }
-    
     
 
     @Enumerated(EnumType.STRING)
@@ -65,9 +55,27 @@ public class Member implements UserDetails {
     public void setMemberType(MemberType memberType) {
         this.memberType = memberType;
     }
+
     
-    @OneToMany(mappedBy = "member")
+    @ManyToOne
+    @JoinColumn(name = "company_Id")
+    private Company company;
+    
+ // 이름으로 부서가져오기1
+    @ManyToOne
+    @JoinColumn(name = "department_Id")
+    private Department department;
+    // 이름으로 부서가져오기2
+    public Department getDepartment() {
+        return department;
+    }
+    
+    @OneToMany
     private List<WorkLog> workLogList;
+    
+    
+    
+    
     
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

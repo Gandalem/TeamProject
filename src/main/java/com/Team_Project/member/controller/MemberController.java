@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -75,36 +76,15 @@ public class MemberController {
 
     @PostMapping(value = "/checkEmail")
     @ResponseBody
-    public String checkEmail(@RequestParam("email") String email) {
-        Optional<Member> memberOpt = memberRepository.findByEmail(email);
+    public String checkEmail(@RequestParam("email") String email) {    	
+    	
+        Optional<Member> memberOpt = memberRepository.findByEmail(email);        
+        
         if (memberOpt.isPresent()) {
             return "duplicate"; 
         } else {
             return ""; 
         }
     }
-
-
- 
-//    @PostMapping(value = "/register")
-//    public ResponseEntity<String> registerMember(@RequestBody MemberDTO memberDTO) {
-//        String email = memberDTO.getEmail();
-//        if (memberService.isEmailDuplicate(email)) {
-//            return new ResponseEntity<>("duplicate_email", HttpStatus.BAD_REQUEST);
-//        } else {
-//            Member member = new Member();
-//            member.setName(memberDTO.getName());
-//            member.setEmail(email);
-//            member.setPassword(memberDTO.getPassword());
-//            member.setSample6_postcode(memberDTO.getSample6_postcode());
-//            member.setSample6_address(memberDTO.getSample6_address());
-//            member.setSample6_detailAddress(memberDTO.getSample6_detailAddress());
-//            member.setSample6_extraAddress(memberDTO.getSample6_extraAddress());
-//            member.setMemberType(MemberType.EMPLOYEE);
-//            memberService.register(member);
-//            return new ResponseEntity<>("member_created", HttpStatus.OK);
-//        }
-//    }
-
     
 }

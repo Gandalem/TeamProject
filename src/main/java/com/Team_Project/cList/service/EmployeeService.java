@@ -1,6 +1,7 @@
 package com.Team_Project.cList.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -31,12 +32,20 @@ public class EmployeeService {
 		return employeeRepository.findAllBy();
 	}
 	
-	
-	//등록
+	//사원 등록
 	@Transactional
 	public Employee createEmployee(Employee employee) {
 		return employeeRepository.save(employee);
 	}
+	
+	//사원 삭제
+	@Transactional
+    public void deleteEmployee(List<String> emailList) {
+        for (String email : emailList) {
+            employeeRepository.deleteByEmail(email);
+        }
+    }
+	
 	
 	
 	

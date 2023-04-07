@@ -19,7 +19,7 @@
 		<tbody>
 			<tr th:each="workLog : ${workLogList}">
 				<td><span th:if="${workLog.member != null}" th:text="${workLog.member.name}"></span></td>
-				<td th:text="${workLog.title}"></td>
+				<td><a th:href="@{|/worklog/detail/${workLog.id}|}" th:text="${workLog.title}"></a></td>
 				<td th:text="${workLog.content}"></td>
 				<td>[[${#temporals.format(workLog.createDate, 'yyyy-mm-dd hh:mm')}]]</td>
 			</tr>

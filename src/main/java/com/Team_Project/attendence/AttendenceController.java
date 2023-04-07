@@ -74,17 +74,17 @@ public class AttendenceController {
     
     
     // 조회버튼
-    @GetMapping(value = "/atten/search")
-    @ResponseBody
-    public List<Commute> getCommuteList(
-    	     @RequestParam("companyId") Long companyId,
-             @RequestParam("departmentId") Long departmentId,
-             @RequestParam("employeeIdx") Long employeeIdx,
-             @RequestParam("year") Integer year,
-             @RequestParam("month") Integer month
-    		){
-    	return 
-    }
+//    @GetMapping(value = "/atten/search")
+//    @ResponseBody
+//    public List<Commute> getCommuteList(
+//    	     @RequestParam("companyId") Long companyId,
+//             @RequestParam("departmentId") Long departmentId,
+//             @RequestParam("employeeIdx") Long employeeIdx,
+//             @RequestParam("year") Integer year,
+//             @RequestParam("month") Integer month
+//    		){
+//    	return 
+//    }
 	
 	
 	

@@ -1,12 +1,16 @@
+// 등록 허용 여부 
+var join = "ban";
+
+
+
+
 $(document).ready(function() {
-	
 	//SelectBox 회사 리스트
  	$.ajax({
 		url: "/clist/posts",
 		method: "GET",
 		dataType: "json",
 		success : function(res){
-			
 			for (i=0; i<res.length; i++) {
                 $("#company").append('<option value="'+res[i].id+'">'+ res[i].cname +'</option>');
 			}
@@ -19,7 +23,6 @@ $(document).ready(function() {
 		method: "GET",
 		dataType: "json",
 		success : function(res){
-			
 			for (i=0; i<res.length; i++) {
                 $("#companyModal").append('<option value="'+res[i].id+'">'+ res[i].cname +'</option>');
 			}
@@ -84,8 +87,8 @@ $(document).ready(function() {
 			companyId : companyId
 		},
 		success : function(res){
-			 $("#department").empty();
-			 $("#department").append('<option value="">선택</option>');
+			 $("#departmentModal").empty();
+			 $("#departmentModal").append('<option value="">선택</option>');
 			for (i=0; i<res.length; i++) {
 	            $("#departmentModal").append('<option value="'+res[i].id+'">'+ res[i].dname +'</option>');
 			}
@@ -96,6 +99,24 @@ $(document).ready(function() {
 	
 	// 모달 등록 버튼 이벤트
 	 $("#btnSave").click(function(){
+		if ( !$.trim($('#name').val()) ) {
+	        toastr.warning('이름를 확인해 주세요.');
+	        $('#name').focus();
+	        return false;
+	    } 
+		 
+		if ( !$.trim($('#email').val()) ) {
+	        toastr.warning('이메일를 확인해 주세요.');
+	        $('#email').focus();
+	        return false;
+	    }
+	    
+	    if (join == "ban") {
+			toastr.warning('가입 확인을 해주세요.');
+			$('#check-email').focus();
+			return false;	
+		}
+		 
 		// 등록할 값 추출 
         let companyId = $("#companyModal option:selected").val();
         let departmentId = $("#departmentModal option:selected").val();
@@ -103,36 +124,77 @@ $(document).ready(function() {
         let email = $("#email").val();
         const token = $("meta[name='_csrf']").attr("content");
         const header = $("meta[name='_csrf_header']").attr("content");
-        
-        //console.log("회사 : " + companyId);
-        //console.log("부서 : " + departmentId);
-		
+                
+        // 등록 데이터
 		var data = {
 	        name: username,
 	        email: email,
 	        company: { id: companyId },
 	        department: { id: departmentId}
     	};
-		
-		//등록 시작
-	   $.ajax({
-		url: "/employee/emCreate",
-		cache : false,
-        beforeSend : function(xhr) {
-            xhr.setRequestHeader(header, token);
-        },
-		method: "POST",
-		contentType: "application/json",
-		dataType: "json",
-		data: JSON.stringify(data),
-		success : function(res){
-			alert("등록되었습니다.");
-			location.href = "/employee";
-		},
-		error : function(error) {
-			console.log(error);
-		} 
-	   });
+        
+       	//사원 테이블에 중복된 이메일 검증
+       	$.ajax({
+		  url: "/employee/emailCheck",
+		  cache : false,
+          beforeSend : function(xhr) {
+              xhr.setRequestHeader(header, token);
+          },
+		  method: "POST",
+		  data:{ "email": email },
+		  success : function(res){
+			  if(res === "OK") {
+				  //등록 시작
+				   $.ajax({
+					url: "/employee/emCreate",
+					cache : false,
+			        beforeSend : function(xhr) {
+			            xhr.setRequestHeader(header, token);
+			        },
+					method: "PUT",
+					contentType: "application/json",
+					dataType: "json",
+					data: JSON.stringify(data),
+					success : function(res){
+						toastr.success('등록되었습니다.');
+						table.ajax.reload();
+						$('#exampleModal').modal("hide");
+						
+						//email을 기반으로 멤버 테이블 수정(회사, 부서 추가)
+						/*
+						var data = {
+					        email: email,
+					        company: { id: companyId },
+					        department: { id: departmentId}
+				    	};
+						
+						$.ajax({
+							url: "/employee/memberUpdate",
+							beforeSend : function(xhr) {
+				            	xhr.setRequestHeader(header, token);
+					        },
+							method: "PUT",
+							contentType: "application/json",
+							dataType: "json",
+							data: JSON.stringify(data),
+							success : function(res){ console("유저 정보 변경되었습니다.")},
+							error : function(error){}
+						}); 
+						*/
+					},
+					error : function(error) {
+						toastr.error("등록에 실패하였습니다.")
+					} 
+				   });
+			  } else {
+				  toastr.error('이미 등록된 사원입니다.');
+			  }
+			  
+		  },
+		  error : function(res){
+			   toastr.error('이메일 검증에 실패하였습니다.');
+		  }   
+		});
     });
 	
 	//사원 리스트 조회 버튼 
@@ -173,7 +235,7 @@ $(document).ready(function() {
 				{
 				    data: null,
 				    render: function (data, type, row) {
-						return '<input type="checkbox">';
+						return '<input type="checkbox" name="check">';
 					}
 				},
 				{ data: 'company.cname' },
@@ -197,7 +259,7 @@ $(document).ready(function() {
 
 
 	// 전체 사원 리스트
-	$('#employeeTable').DataTable({
+	var table = $('#employeeTable').DataTable({
 		searching: false,
 		paging: false,
 		ordering: true,
@@ -214,7 +276,7 @@ $(document).ready(function() {
 			{
 			    data: null,
 			    render: function (data, type, row) {
-					return '<input type="checkbox">';
+					return '<input type="checkbox" name="check">';
 				}
 			},
 			{ data: 'company.cname' },
@@ -236,4 +298,87 @@ $(document).ready(function() {
 	});
 
 	
+	//환민 ver. email checked 
+	$("#check-email").click(function() {
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        
+        var email = $("#email").val();
+        $.ajax({
+            type : "POST", // 요청 메서드를 POST로 변경
+            url : "/signup/checkEmail",
+            data : {	
+                "email" : email
+            },
+            beforeSend : function(xhr){
+                /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                xhr.setRequestHeader(header, token);
+            },
+            success : function(result) {
+                if (result === "duplicate") {
+                    $("#email-error").html("");
+                    toastr.success('가입된 이메일입니다.');
+                    join = "permit";
+                } else {
+                    $("#email-error").html("");
+                    toastr.warning('가입되지 않은 이메일입니다.');
+                    join = "ban";
+                }
+            },
+            error : function(e) {
+                console.log("이메일 중복 확인 과정에서 에러가 발생했습니다: " + e);
+            }
+        });
+    });
+        
+ 	// checkbox 전체 선택 이벤트
+    $('#select_all').click(function(){
+		var checked = $('#select_all').is(':checked');
+		
+		if(checked){
+			$('input:checkbox').prop('checked', true);
+		} else {
+			$('input:checkbox').prop('checked', false);
+		}
+	});
 	
+	// 삭제 버튼 
+	$('#btnDelete').click(function(){
+		var rowData = new Array();
+		var tdArr = new Array();
+		var checkbox = $('input[name=check]:checked');
+		const token = $("meta[name='_csrf']").attr("content");
+        const header = $("meta[name='_csrf_header']").attr("content");
+		
+		checkbox.each(function(i){
+			
+			var tr = checkbox.parent().parent().eq(i);
+			var td = tr.children();
+			rowData.push(tr.text());
+			
+			var email = td.eq(4).text();
+			tdArr.push(email);
+		});
+				
+		$.ajax({
+	  	  url: "/employee/emDelete",
+	  	  beforeSend : function(xhr) {
+	        	xhr.setRequestHeader(header, token);
+	        },
+	  	  method: "DELETE",
+	  	  contentType: "application/json",
+	  	  data: JSON.stringify(tdArr),
+	  	  success : function(res){
+				toastr.success('삭제되었습니다.');
+				$('#employeeTable').DataTable().ajax.reload();
+			},
+	  	  error : function(error){
+				toastr.error('오류가 발생했습니다.');
+			}
+	    });
+	});
+        
+        
+        
+        
+        
