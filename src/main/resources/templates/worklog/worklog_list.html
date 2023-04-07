@@ -1,9 +1,82 @@
-<html layout:decorate="~{layout}">
-	
-	<div layout:fragment="content" class = "container my-3" align = "right">
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css"/>
+    <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
+    <title>근무일지 페이지</title>
+    <style>
+        .headerForm {
+            width: 100%;
+            height: 70px;
+            border: solid 1px black;
+        }
+        .footerForm {
+            width: 100%;
+            height: 70px;
+            border: solid 1px black;
+        }
+        .headerForm h1 {
+            text-align: center;
+        }
+        .footerForm h1 {
+            text-align: center;
+        }
+        .mainForm {
+            width: 100%;
+            height: 100%;
+        }
+        .search {
+            width: 100%;
+            height: 60px;
+            margin-left: 0 auto;
+            margin-right: 0 auto;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="headerForm">
+            <h1> 근무일지 페이지입니다. </h1>
+        </div>
+    </header>
+    <main>
+        <div class="mainForm" style="text-align: center;">
+            <div class="search">
+                <label style="margin-left: 100px;">회사명</label>
+                <select name="company" id="company" onchange="company();">
+                    <option value="">선택</option>
+                    <!-- <option value="samsung">삼성</option>
+                    <option value="apple">애플</option> -->
+                </select>
+                <label>부서명</label>
+                <select name="department" id="department" onchange="department();">
+                    <option value="">선택</option>
+                    <!-- <option value="management">경영팀</option>
+                    <option value="design">디자인팀</option>
+                    <option value="develop">개발팀</option> -->
+                </select>
+                <label>이름</label>
+                <select name="username" id="username">
+                    <option value="">선택</option>
+                    <!-- <option value="1">홍길동</option>
+                    <option value="2">이순신</option> -->
+                </select>
+                <button id="btnSearch" class="btn btn-primary" style="width: 70px; margin-left: 20px; margin-right: 100px;" disabled>조회</button>
+                <a th:href = "@{/worklog/worklog_create}" class = "btn btn-primary"><button class="btn btn-primary" style="width: 70px;">등록</button></a>
+                <button class="btn btn-warning" style="width: 70px;" disabled>삭제</button>
+                
 		<div class="row my-3">
 			<div class="col-6">
-				<a th:href = "@{/worklog/worklog_create}" class = "btn btn-primary">근무 일지 등록</a>
 			</div>
 		</div>
 	<table border="1" class="table">
@@ -11,15 +84,15 @@
 			<!-- 제목을 처리 -->
 			<tr>
 				<th>작성자</th>
-				<th style="width: 50%">제목</th>
-				<th>내용</th>
+				<th >제목</th>
+				<th style="width: 50%">내용</th>
 				<th>작성일</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr th:each="workLog : ${workLogList}">
 				<td><span th:if="${workLog.member != null}" th:text="${workLog.member.name}"></span></td>
-				<td><a th:href="@{|/worklog/detail/${workLog.id}|}" th:text="${workLog.title}"></a></td>
+				<td><a th:href="@{|/worklog/worklog_detail/${workLog.id}|}" th:text="${workLog.title}"></a></td>
 				<td th:text="${workLog.content}"></td>
 				<td>[[${#temporals.format(workLog.createDate, 'yyyy-mm-dd hh:mm')}]]</td>
 			</tr>
