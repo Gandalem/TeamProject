@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import com.Team_Project.cList.repository.CommuteRepository;
+import com.Team_Project.entity.Commute;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class AttendenceService {
 	
 	private final CommuteRepository commuteRepository;
+	private final AttendenceRepository AttendenceRepository;
 	
 	// DB의 today의 리스트에서 년도만 빼서 넣기
     public List<Integer> getYearsByEmployeeIdx(Long employeeIdx) {
@@ -40,7 +43,9 @@ public class AttendenceService {
     }
     
     
-    
+    public List<Commute> allList() {
+        return AttendenceRepository.findAllBy();
+    }
     
 
 }

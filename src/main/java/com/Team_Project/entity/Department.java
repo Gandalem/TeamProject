@@ -35,5 +35,8 @@ public class Department extends BaseTimeEntity {
 	@OneToMany
 	private List<Member> memberId; 
 	
+	@OneToMany
+	private List<Commute> commuteId;
+	
 
 }

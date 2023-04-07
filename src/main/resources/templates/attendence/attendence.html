@@ -6,6 +6,12 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="/css/attendence.css">
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css"/>
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
 </head>
 <body>
    	<h3 class="h3">출.퇴근 관리</h3>
@@ -21,23 +27,24 @@
 				<select class="form-select" id="name" name="name" onchange="nname();">
 					<option>이름선택</option>
 				</select>
+				<!-- 
 				<div>
 					<input type="date">
 				</div>
+				 -->
                 <select class="form-select" id="year" name="year">
                     <option>년도</option>
                 </select>
                 <select class="form-select" id="month" name="month">
                     <option>월</option>
                 </select>
-				<button class="btn btn-secondary" id="bu1" onclick="searchAttendance();"> 조회하기 </button>
-				
+				<button class="btn btn-secondary" id="bu1" type="button"> 조회하기 </button>				
 			</form>
 		</div>
 
         <div class="at_div2">
             <div class="at_div2_div1">
-                <table class="table">
+                <table class="table" id="attendanceTable">
                 	<thead>
 	                    <tr>
 	                    	<th class="th1">요일</th>
@@ -45,15 +52,17 @@
 	                        <th class="th3">비고란</th>
 	                    </tr>
                     </thead>
-                    <tr>
-                    	<td class="td1"></td>
-                    	<td class="td2">출근</td>
-                        <td class="td3"></td>
-                        <td class="td2">퇴근</td>
-                        <td class="td3"></td>
-                        <!-- 비고란 -->
-                        <td class="td4">비고</td>
-                    </tr>
+                    <tbody>
+	                    <tr>
+	                    	<td class="td1"></td>
+	                    	<td class="td2">출근</td>
+	                        <td class="td3"></td>
+	                        <td class="td2">퇴근</td>
+	                        <td class="td3"></td>
+	                        <!-- 비고란 -->
+	                        <td class="td4">비고</td>
+	                    </tr>
+                    </tbody>
                 </table>
             </div>
 
@@ -67,7 +76,7 @@
 	// 회사리스트
 	$(document).ready(function(){
 		$.ajax({
-			url: "/atten/com",
+			url: "/clist/posts",
 			method: "GET",
 			dataType: "json",
 			success : function(res){
@@ -86,9 +95,8 @@
 	// 회사선택
 	function ccompany(){
 		var companyId = $("#company option:selected").val();
-		console.log(companyId);
 		$.ajax({
-			url: "/atten/de",
+			url: "/clist/getDepartments",
 			method:"GET",
 			dataType:"json",
 			data: {companyId : companyId},
@@ -106,14 +114,15 @@
 	// 부서선택
 	function ddepartment(){
 		// 부서선택시
+		var companyId = $("#company option:selected").val();
 		var departmentId = $("#department option:selected").val();
-		console.log(departmentId);
 		// ajax로 전송
 		$.ajax({
-			url: "/atten/na",
+			url: "/employee/userList",
 			method:"GET",
 			dataType:"json",
-			data:{departmentId : departmentId},
+			data:{company: companyId,
+				department : departmentId},
 			success : function(res){
 			    $("#name").empty();
 			    $("#name").append('<option>이름선택</option>');
@@ -178,69 +187,37 @@
 
 	
 	
-	function searchAttendance(){
+	// 이 부분을 수정하여 DataTables를 초기화하고 데이터를 불러옵니다.
+	$("#bu1").click(function(){
 		var companyId = $("#company option:selected").val();
 		var departmentId = $("#department option:selected").val();
 		var employeeIdx = $("#name option:selected").val();
 		var year = $("#year option:selected").val();
 		var month = $("#month option:selected").val();
 		
-		console.log(companyId);
-		console.log(departmentId);
-		console.log(employeeIdx);
-		console.log(year);
-		console.log(month);
-		
-		//기존의 행 제거
-		$(".commute-row").remove;
 		
 		
-		$.ajax({
-			url:"/atten/search",
-			method:"GET",
-			dataType:"json",
-			data:{
-				companyId:companyId,
-				departmentId:departmentId,
-				employeeIdx:employeeIdx,
-				year:year,
-				month:month
-			},
-			success: function(res){
-				for(var i=0;i<res.length;i++){
-					var commute = res[i];
-					var rec = '<tr class="commute-row">' +
-                    '<td class="td1">' + commute.today + '</td>' +
-                    '<td class="td2">' + commute.workStart + '</td>' +
-                    '<td class="td3"></td>' +
-                    '<td class="td2">' + commute.workEnd + '</td>' +
-                    '<td class="td3"></td>' +
-                    '<td class="t4">비고</td>' +
-                    '</tr>';
-                    
-					$(".table").append(rec);	
-				};
-			},
-			error:function(request, status, error){
+		
+	});
+	
+	var table = $('#attendanceTable').DataTable({
+		searching: false,
+		paging: false,
+		ordering: true,
+		info: false,
+		serverSide: true,
+		processing: true,
+		destroy: true,
+		ajax: {
+			url: '/atten/search',
+		    type: 'GET',
+		    dataSrc: '',
+		},
+		columns: [
+			{ data: 'today' }
+	 	]	  	
+	});
 
-				console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-
-			}
-		});
-	}
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
 </script>
 </body>
 

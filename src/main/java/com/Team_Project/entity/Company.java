@@ -46,7 +46,10 @@ public class Company extends BaseTimeEntity {
 	private List<Employee> employeeId;
 	
 	@OneToMany
-	private List<Member> memberId; 
+	private List<Member> memberId;
+	
+	@OneToMany
+	private List<Commute> commuteId;
 	
 	public Company() {
 	    // default constructor
