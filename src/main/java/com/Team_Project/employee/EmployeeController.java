@@ -68,7 +68,6 @@ public class EmployeeController {
     }
 	
 	//사원 삭제
-	
 	@DeleteMapping("/emDelete")
 	@ResponseBody
 	public void employeeDelete(@RequestBody List<String> emailList) {

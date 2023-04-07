@@ -1,5 +1,6 @@
 package com.Team_Project.member.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -86,5 +88,25 @@ public class MemberController {
             return ""; 
         }
     }
+    
+   //Employee 에서 등록시 멤버 정보 업데이트 처리
+    @PutMapping("/memberUpdate")
+    @ResponseBody
+    public void updateMember(@RequestBody Member member) {
+    	System.out.println("확인용" + member);
+    	this.memberService.updateMember(member);
+    }
+    
+    //Employee 에서 삭제시 멤버 정보 업데이트 처리
+    @PutMapping("/memberUpdate2")
+    @ResponseBody
+    public void updateMember2(@RequestBody List<String> emails) {
+    	this.memberService.updateMember2(emails);
+    }
+    
+    
+    
+    
+    
     
 }

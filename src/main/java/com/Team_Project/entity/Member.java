@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,30 +46,26 @@ public class Member implements UserDetails {
     private LocalDateTime updatedDate;
     private LocalDateTime deletedDate;
     private boolean deleted;
-
+    
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "company_Id")
+    private Company company;
+    
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "department_Id")
+    private Department department;
+    
+    @OneToMany
+    private List<WorkLog> workLogList;
+    
     @Enumerated(EnumType.STRING)
     private MemberType memberType;
 
     public void setMemberType(MemberType memberType) {
         this.memberType = memberType;
-    }
-
-    
-    @ManyToOne
-    @JoinColumn(name = "company_Id")
-    private Company company;
-    
-    @ManyToOne
-    @JoinColumn(name = "department_Id")
-    private Department department;
-    
-    
-    @OneToMany
-    private List<WorkLog> workLogList;
-    
-    
-    
-    
+    }    
     
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
