@@ -161,7 +161,7 @@ $(document).ready(function() {
 						$('#exampleModal').modal("hide");
 						
 						//email을 기반으로 멤버 테이블 수정(회사, 부서 추가)
-						/*
+						
 						var data = {
 					        email: email,
 					        company: { id: companyId },
@@ -169,7 +169,7 @@ $(document).ready(function() {
 				    	};
 						
 						$.ajax({
-							url: "/employee/memberUpdate",
+							url: "/signup/memberUpdate",
 							beforeSend : function(xhr) {
 				            	xhr.setRequestHeader(header, token);
 					        },
@@ -180,7 +180,7 @@ $(document).ready(function() {
 							success : function(res){ console("유저 정보 변경되었습니다.")},
 							error : function(error){}
 						}); 
-						*/
+						
 					},
 					error : function(error) {
 						toastr.error("등록에 실패하였습니다.")
@@ -276,7 +276,7 @@ $(document).ready(function() {
 			{
 			    data: null,
 			    render: function (data, type, row) {
-					return '<input type="checkbox" name="check">';
+					return '<input type="checkbox" name="check">';  
 				}
 			},
 			{ data: 'company.cname' },
@@ -354,8 +354,6 @@ $(document).ready(function() {
 			
 			var tr = checkbox.parent().parent().eq(i);
 			var td = tr.children();
-			rowData.push(tr.text());
-			
 			var email = td.eq(4).text();
 			tdArr.push(email);
 		});
@@ -371,6 +369,22 @@ $(document).ready(function() {
 	  	  success : function(res){
 				toastr.success('삭제되었습니다.');
 				$('#employeeTable').DataTable().ajax.reload();
+				
+				//멤버 업데이트 (회사ID, 부서ID 삭제)
+				
+				$.ajax({
+					url: "/signup/memberUpdate2",
+					beforeSend : function(xhr) {
+					    	xhr.setRequestHeader(header, token);
+				    },
+					method: "PUT",
+					contentType: "application/json",
+					dataType: "json",
+					data: JSON.stringify(tdArr),
+					success : function(res){ console("유저 정보 변경되었습니다.")},
+					error : function(error){}
+				});
+			
 			},
 	  	  error : function(error){
 				toastr.error('오류가 발생했습니다.');

@@ -1,5 +1,8 @@
 package com.Team_Project.member.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -74,6 +77,30 @@ public class MemberService {
             .orElseThrow(() -> new IllegalArgumentException("Invalid member Id:" + email));
     }
 
+    @Transactional
+	public void updateMember(Member member) {
+		Optional<Member> existingMember = memberRepository.findByEmail(member.getEmail());
+		if (!existingMember.isPresent()) {
+			throw new IllegalArgumentException("Invalid email address.");
+		}
+		Member memberToUpdate = existingMember.get();
+		memberToUpdate.setCompany(member.getCompany());
+		memberToUpdate.setDepartment(member.getDepartment());
+		memberRepository.save(memberToUpdate);
+	}
+
+
+    @Transactional
+    public void updateMember2(List<String> emailList) {
+        for (String email : emailList) {
+        	 Optional<Member> member = memberRepository.findByEmail(email);
+        	 Member member1 = member.get();
+        	 member1.setCompany(null);
+             member1.setDepartment(null);
+             memberRepository.save(member1);
+        }
+    } 
+    
 
     
 }
