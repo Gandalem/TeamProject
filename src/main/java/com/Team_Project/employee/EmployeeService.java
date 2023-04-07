@@ -29,13 +29,6 @@ public class EmployeeService {
 		return employeeRepository.findAllBy();
 	}
 	
-	//이메일 체크
-	
-	public Optional<Employee> checkEmail(String email) {
-		return employeeRepository.findByEmail(email);
-	}
-	
-	
 	//사원 등록
 	@Transactional
 	public Employee createEmployee(Employee employee) {
@@ -43,12 +36,13 @@ public class EmployeeService {
 	}
 	
 	//사원 삭제
-	/*
 	@Transactional
-	public void deleteEmployee(Employee employee) {
-		this.employeeRepository.delete(employee);
-	}
-	*/
+    public void deleteEmployee(List<String> emailList) {
+        for (String email : emailList) {
+            employeeRepository.deleteByEmail(email);
+        }
+    }
+	
 	
 	
 }

@@ -124,7 +124,7 @@ $(document).ready(function() {
         let email = $("#email").val();
         const token = $("meta[name='_csrf']").attr("content");
         const header = $("meta[name='_csrf_header']").attr("content");
-        
+                
         // 등록 데이터
 		var data = {
 	        name: username,
@@ -141,51 +141,58 @@ $(document).ready(function() {
               xhr.setRequestHeader(header, token);
           },
 		  method: "POST",
-		  contentType: "application/json",
-		  dataType: "json",
-		  data: JSON.stringify({ email: $("#email").val() }),
+		  data:{ "email": email },
 		  success : function(res){
-			  //등록 시작
-			   $.ajax({
-				url: "/employee/emCreate",
-				cache : false,
-		        beforeSend : function(xhr) {
-		            xhr.setRequestHeader(header, token);
-		        },
-				method: "PUT",
-				contentType: "application/json",
-				dataType: "json",
-				data: JSON.stringify(data),
-				success : function(res){
-					toastr.success('등록되었습니다.');
-					table.ajax.reload();
-					$('#exampleModal').modal("hide");
-					
-					//email을 기반으로 멤버 테이블 수정(회사, 부서 추가)
-					/*
-					$.ajax({
-						url: "",
-						beforeSend : function(xhr) {
-			            	xhr.setRequestHeader(header, token);
-				        },
-						method: "POST",
-						contentType: "application/json",
-						dataType: "json",
-						data: JSON.stringify(data),
-						success : function(res){},
-						error : function(error) {}
-					}); */
-					
-				},
-				error : function(error) {
-					toastr.error("등록에 실패하였습니다.")
-				} 
-			   });
+			  if(res === "OK") {
+				  //등록 시작
+				   $.ajax({
+					url: "/employee/emCreate",
+					cache : false,
+			        beforeSend : function(xhr) {
+			            xhr.setRequestHeader(header, token);
+			        },
+					method: "PUT",
+					contentType: "application/json",
+					dataType: "json",
+					data: JSON.stringify(data),
+					success : function(res){
+						toastr.success('등록되었습니다.');
+						table.ajax.reload();
+						$('#exampleModal').modal("hide");
+						
+						//email을 기반으로 멤버 테이블 수정(회사, 부서 추가)
+						/*
+						var data = {
+					        email: email,
+					        company: { id: companyId },
+					        department: { id: departmentId}
+				    	};
+						
+						$.ajax({
+							url: "/employee/memberUpdate",
+							beforeSend : function(xhr) {
+				            	xhr.setRequestHeader(header, token);
+					        },
+							method: "PUT",
+							contentType: "application/json",
+							dataType: "json",
+							data: JSON.stringify(data),
+							success : function(res){ console("유저 정보 변경되었습니다.")},
+							error : function(error){}
+						}); 
+						*/
+					},
+					error : function(error) {
+						toastr.error("등록에 실패하였습니다.")
+					} 
+				   });
+			  } else {
+				  toastr.error('이미 등록된 사원입니다.');
+			  }
+			  
 		  },
-		  error : function(xhr){
-			   if(xhr.status === 409) {
-				   toastr.error('이미 등록된 사원입니다.');
-			   }
+		  error : function(res){
+			   toastr.error('이메일 검증에 실패하였습니다.');
 		  }   
 		});
     });
@@ -335,19 +342,13 @@ $(document).ready(function() {
 		}
 	});
 	
-	//체크박스
-	//var checked = $('input[name=check]:checked');
-	
-
-	//$("#btnDelete").prop("disabled", false);
-	
-	
-	
 	// 삭제 버튼 
 	$('#btnDelete').click(function(){
 		var rowData = new Array();
 		var tdArr = new Array();
 		var checkbox = $('input[name=check]:checked');
+		const token = $("meta[name='_csrf']").attr("content");
+        const header = $("meta[name='_csrf_header']").attr("content");
 		
 		checkbox.each(function(i){
 			
@@ -358,12 +359,23 @@ $(document).ready(function() {
 			var email = td.eq(4).text();
 			tdArr.push(email);
 		});
-		
-		console.log("삭제할 데이터 행 : " + tdArr);
-		
-		
-		
-		
+				
+		$.ajax({
+	  	  url: "/employee/emDelete",
+	  	  beforeSend : function(xhr) {
+	        	xhr.setRequestHeader(header, token);
+	        },
+	  	  method: "DELETE",
+	  	  contentType: "application/json",
+	  	  data: JSON.stringify(tdArr),
+	  	  success : function(res){
+				toastr.success('삭제되었습니다.');
+				$('#employeeTable').DataTable().ajax.reload();
+			},
+	  	  error : function(error){
+				toastr.error('오류가 발생했습니다.');
+			}
+	    });
 	});
         
         

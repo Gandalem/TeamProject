@@ -1,9 +1,12 @@
 package com.Team_Project.employee;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.Team_Project.entity.Company;
 import com.Team_Project.entity.Department;
-import com.Team_Project.entity.Member;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,13 +25,16 @@ public class Employee {
 	
 	private String name;
 	
+	@Column(name = "email", unique = true)
 	private String email;
 	
 	@ManyToOne
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "company_Id")
 	private Company company;
 	
 	@ManyToOne
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "department_Id")
 	private Department department;
 	

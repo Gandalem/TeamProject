@@ -1,11 +1,10 @@
 package com.Team_Project.employee;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class EmployeeController {
 	
 	private final EmployeeService employeeService;
+	private final EmployeeRepository employeeRepository;
 	
 	@GetMapping("")
 	public String Employee() {
@@ -49,15 +49,16 @@ public class EmployeeController {
 	}
 	
 	//이메일 체크
-	
 	@PostMapping("/emailCheck")
-	public ResponseEntity<Void> checkEmail(@RequestBody Map<String, String> request) {
-	    String email = request.get("email");
-	    if(employeeService.checkEmail(email) != null) {
-	        return ResponseEntity.status(HttpStatus.CONFLICT).build();
-	    }
-	    return ResponseEntity.ok().build();
-	}
+	@ResponseBody
+    public String checkEmail(@RequestParam("email") String email) {
+		Optional<Employee> em = employeeRepository.findByEmail(email);
+		if (em.isPresent()) {
+			return "BAN";
+        } else {
+        	return "OK";
+        }
+    }
 	
 	
 	//사원 등록
@@ -67,10 +68,11 @@ public class EmployeeController {
     }
 	
 	//사원 삭제
-	/*
+	
 	@DeleteMapping("/emDelete")
-	public void employeeDelete(@RequestBody Employee employee) {
-		this.employeeService.deleteEmployee(employee);	
+	@ResponseBody
+	public void employeeDelete(@RequestBody List<String> emailList) {
+		this.employeeService.deleteEmployee(emailList);	
 	}
-	*/
+	
 }
