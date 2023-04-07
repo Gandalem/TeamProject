@@ -77,13 +77,17 @@ public class AttendenceController {
 //    @GetMapping(value = "/atten/search")
 //    @ResponseBody
 //    public List<Commute> getCommuteList(
-//    	     @RequestParam("companyId") Long companyId,
-//             @RequestParam("departmentId") Long departmentId,
-//             @RequestParam("employeeIdx") Long employeeIdx,
-//             @RequestParam("year") Integer year,
-//             @RequestParam("month") Integer month
-//    		){
-//    	return 
+//            @RequestParam("companyId") Long companyId,
+//            @RequestParam("departmentId") Long departmentId,
+//            @RequestParam("employeeIdx") Long employeeIdx,
+//            @RequestParam("year") Integer year,
+//            @RequestParam("month") Integer month,
+//            Model model
+//    		) {
+//        List<Commute> commutes = commuteService.getCommutes(companyId, departmentId, employeeIdx, year, month);
+//        model.addAttribute("commutes", commutes);
+//        return "commutes"; // 이 부분을 실제 프로젝트에 맞는 뷰 이름으로 변경해야 합니다.
+//    	}
 //    }
 	
 	
