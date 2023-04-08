@@ -138,27 +138,41 @@
             <form>
                 <div class="mb-3">
                 	<input type="hidden" name="id" id="id" th:value="${member.id}">
+                	<label>이름 : </label>
                     <input disabled="disabled" type="text" name="mypage" id="name" class="form-control" th:value="${member.name}">
                 </div>
                 <div class="mb-3">
+                	<label>이메일 : </label>
                     <input disabled="disabled" type="text" name="mypage" id="email" class="form-control" th:value="${member.email}">
                 </div>
                 <div class="mb-3">
+                	<label>전화 번호 : </label>
                     <input disabled="disabled" type="text" name="mypage" id="phoneNumber" class="form-control" th:value="${member.phoneNumber}">
                 </div>
                 <div class="mb-3">
+                	<label>우편 번호 :</label>
                     <input disabled="disabled" type="text" name="mypage" id="sample6_postcode" class="form-control" th:value="${member.sample6_postcode}"> 
+                    <input disabled="disabled" type="button" name="mypage" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
                 </div>
-                <input disabled="disabled" type="button" name="mypage" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
-
                 <div class="mb-3">
+                	<label>주소 : </label>
                     <input disabled="disabled" type="text" name="mypage" id="sample6_jibunAddress" class="form-control" th:value="${member.sample6_address}">
                 </div>
                 <div class="mb-3">
+                	<label>상세 주소 : </label>
                     <input disabled="disabled" type="text" name="mypage" id="sample6_detailAddress" class="form-control" th:value="${member.sample6_detailAddress}">
                 </div>
                 <div class="mb-3">
+                	<label>참고 항목 : </label>
                     <input disabled="disabled" type="text" id="sample6_extraAddress" class="form-control"th:value="${member.sample6_extraAddress}">
+                </div>
+                <div>
+                	<label>회사 : </label>
+                	<input disabled="disabled" type="text" name="company" id="company" class="form-control" th:value="${member.company.cname}">
+                </div>
+                <div>
+                	<label>부서 : </label>
+                	<input disabled="disabled" type="text" name="company" id="company" class="form-control" th:value="${member.department.dname}">
                 </div>
                 <button class="btn btn-primary" id="updateBtn" style="float: right;">수정</button>
                 <button class="btn btn-primary" id="saveBtn" style="float: right;">저장</button>

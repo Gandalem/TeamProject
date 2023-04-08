@@ -16,12 +16,22 @@
         $("#check-email").click(function() {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
+
+            var email = $("#email").val();
             
+            // 이메일 형식 확인
+            var emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+            if (!emailRegex.test(email)) {
+                alert("올바른 이메일 형식으로 입력해주세요.");
+                return;
+            }
+
+           
             var email = $("#email").val();
             $.ajax({
                 type : "POST", // 요청 메서드를 POST로 변경
                 url : "/signup/checkEmail",
-                data : {	
+                data : {    
                     "email" : email
                 },
                 beforeSend : function(xhr){
@@ -32,9 +42,10 @@
                     if (result === "duplicate") {
                         $("#email-error").html("");
                         alert("이메일이 이미 등록되어 있습니다.");
+                        $("#signup-btn").prop("disabled", true); // 회원가입 버튼 disabled 설정
                     } else {
-                        $("#email-error").html("");
                         alert("이메일을 사용할 수 있습니다.");
+                        $("#signup-btn").prop("disabled", false); // 회원가입 버튼 disabled 해제
                     }
                 },
                 error : function(e) {
@@ -90,7 +101,7 @@
 					<input type="text" id="sample6_extraAddress" name="sample6_extraAddress" placeholder="참고항목">
                 </div>
                 <br>
-                <button type="submit">회원가입</button>
+                <button type="submit" id="signup-btn" disabled>회원가입</button>
             </form>
         </div>
     </div>

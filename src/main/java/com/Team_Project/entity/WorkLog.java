@@ -2,6 +2,9 @@ package com.Team_Project.entity;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -32,6 +35,21 @@ public class WorkLog {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+    
+    @ManyToOne
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JoinColumn(name = "company_Id")
+	private Company company;
+	
+	@ManyToOne
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JoinColumn(name = "department_Id")
+	private Department department;
+	
+	@ManyToOne
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JoinColumn(name = "employee_Id")
+	private Employee employee;
     
     public Long getMemberId() {
         return member.getId();

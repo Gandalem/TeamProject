@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.Team_Project.cList.repository.EmployeeRepository;
 import com.Team_Project.config.DataNotFoundException;
 import com.Team_Project.entity.Member;
 import com.Team_Project.entity.WorkLog;
@@ -15,12 +16,12 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class WorkLogSerivce {
+public class WorkLogService {
 	
 	private final WorkLogRepository workLogRepository;
 	
 	public List<WorkLog> getList(){
-		return this.workLogRepository.findAll();
+		return workLogRepository.findAll();
 	}
 
 	public WorkLog getWorkLog(Long id) {
@@ -49,8 +50,23 @@ public class WorkLogSerivce {
         this.workLogRepository.save(workLog);
     }
  
-	public void delete(WorkLog workLog) {
-		this.workLogRepository.delete(workLog);
+	// select box 이름 호출
+	public List<WorkLog> UserList(Long companyId, Long departmentId) {
+		return workLogRepository.findByCompany_IdAndDepartment_Id(companyId, departmentId);
 	}
+
+	// 조회 리스트
+	public List<WorkLog> emList(Long companyId, Long departmentId, Long id) {
+		return workLogRepository.findByCompany_IdAndDepartment_IdAndId(companyId, departmentId, id);
+	}
+
+
+	// 근무일지 삭제
+//	@Transactional
+//	    public void deleteWorkLog(List<String> emailList) {
+//	        for (String email : emailList) {
+//	        	workLogRepository.deleteByEmail(email);
+//	        }
+//	}
 	
 }

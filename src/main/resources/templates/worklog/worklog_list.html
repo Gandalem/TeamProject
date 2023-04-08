@@ -94,9 +94,23 @@
 				<td><span th:if="${workLog.member != null}" th:text="${workLog.member.name}"></span></td>
 				<td><a th:href="@{|/worklog/worklog_detail/${workLog.id}|}" th:text="${workLog.title}"></a></td>
 				<td th:text="${workLog.content}"></td>
-				<td>[[${#temporals.format(workLog.createDate, 'yyyy-mm-dd hh:mm')}]]</td>
+				<td th:text="${#temporals.format(workLog.createDate, 'yyyy-MM-dd HH:mm')}"></td>
 			</tr>
 		</tbody>
 	</table>
+	<div class="table-responsive">
+                <table id="worklogTable" class="table table-bordered" style="float: left; width: 100%; text-align: center;">
+                    <thead class="thead-light">
+                        <tr>
+                            <th style="min-width: 10px;" class="text-center"><input id="select_all" name="check" type="checkbox"></th>
+                            <th style="min-width: 70px;" class="text-center">작성자</th>
+                            <th style="min-width: 70px;" class="text-center">제목</th>
+                            <th style="min-width: 70px;" class="text-center">내용</th>
+                            <th style="min-width: 70px;" class="text-center">작성일</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+	
 </div>
 </html>
