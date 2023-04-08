@@ -35,10 +35,18 @@ public class RootController {
 	    // 사용자 정보가 존재하면, 모델에 이름, 부서, 회사 추가
 	    if (member != null) {
 	        model.addAttribute("name", member.getName());
+	        model.addAttribute("employeeId", member.getId());
 	        if (member.getDepartment() != null) {
 	            model.addAttribute("departmentName", member.getDepartment().getDname());
+	            model.addAttribute("departmentId", member.getDepartment().getId());
 	        } else {
 	            model.addAttribute("departmentName", "-");
+	            model.addAttribute("departmentId", null);
+	        }
+	        if(member.getCompany() != null) {
+	        	model.addAttribute("companyId", member.getCompany().getId());
+	        }else {
+	        	model.addAttribute("companyId", null);
 	        }
 	    }
 	    

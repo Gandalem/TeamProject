@@ -32,4 +32,7 @@ public class DService {
 		return dRepository.findAll();
 	}
 	
+	public Department getDepartmentById(Long departmentId) {
+	    return dRepository.findById(departmentId).orElse(null);
+	}
 }

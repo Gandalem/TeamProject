@@ -13,8 +13,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.Team_Project.cList.repository.CommuteRepository;
+import com.Team_Project.cList.service.CListService;
 import com.Team_Project.cList.service.CommuteService;
+import com.Team_Project.cList.service.DService;
+import com.Team_Project.cList.service.EmployeeService;
 import com.Team_Project.entity.Commute;
+import com.Team_Project.entity.Company;
+import com.Team_Project.entity.Department;
+import com.Team_Project.entity.Employee;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,10 +30,17 @@ public class CommuteController {
 	
 	private final CommuteService commuteService;
 	private final CommuteRepository commuteRepository;
+	private final EmployeeService employeeService;
+	private final CListService companyService;
+	private final DService departmentService;
 	
 	// DB에 출근시간저장
 	@PostMapping(value = "/commute/start")
-	public void saveWorkStart(@RequestParam(name = "workStart") String workStart, @RequestParam(name="today") String today) {
+	public void saveWorkStart(@RequestParam(name = "workStart") String workStart, 
+							  @RequestParam(name="today") String today,
+							  @RequestParam(name="employeeId") Long employeeId,
+	                          @RequestParam(name = "companyId") Long companyId,
+	                          @RequestParam(name = "departmentId") Long departmentId) {
 	    try {
 	        // 날짜 문자열을 LocalDateTime으로 변환
 	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d");
@@ -37,7 +50,15 @@ public class CommuteController {
 	        Commute commute = new Commute();
 	        commute.setWorkStart(LocalDateTime.parse(workStart, DateTimeFormatter.ofPattern("yyyy년 M월 d일 H시 m분 s초")));
 	        commute.setToday(todayDate);
-
+	        
+	        // employee, company, department를 찾아 commute에 설정
+	        Employee employee = employeeService.getEmployeeById(employeeId);
+	        Company company = companyService.getCompanyById(companyId);
+	        Department department = departmentService.getDepartmentById(departmentId);
+	        commute.setEmployee(employee);
+	        commute.setCompany(company);
+	        commute.setDepartment(department);
+	        
 	        // Commute 객체 저장
 	        commuteService.saveCommute(commute);
 	    } catch (Exception e) {

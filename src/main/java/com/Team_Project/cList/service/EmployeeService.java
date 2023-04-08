@@ -1,7 +1,8 @@
+
+
 package com.Team_Project.cList.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -53,6 +54,8 @@ public class EmployeeService {
 	public List<Employee> getEmployeesByDepartmentId(Long departmentId){
 		return employeeRepository.findEmployeesByDepartmentId(departmentId);
 	}
-	
+	public Employee getEmployeeById(Long employeeId) {
+	    return employeeRepository.findById(employeeId).orElse(null);
+	}
 	
 }

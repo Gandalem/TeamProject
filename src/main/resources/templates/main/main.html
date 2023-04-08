@@ -17,7 +17,7 @@
                     </table>
                 </div>
                 <div class="index_div1_div2" id="date5"></div>
-                <div class="index_div1_div3"><a href="/" class="index_div1_a">근무일지 등록</a></div>
+                <div class="index_div1_div3"><a href="/worklog/worklog_create" class="index_div1_a">근무일지 등록</a></div>
             </div>
 
             <div class="index_div2">
@@ -92,6 +92,15 @@
 			$(this).prop("disabled", true);    // 출근 버튼 비활성화
 			$("#lw").prop("disabled", false);  // 퇴근 버튼 활성화
 			
+			// 사용자의 id값 가져오기
+			var employeeId = "[[${employeeId}]]";
+			var companyId = "[[${companyId}]]";
+			var departmentId = "[[${departmentId}]]";
+			
+			console.log("employeeId : " + employeeId);
+			console.log("companyId : " + companyId);
+			console.log("departmentId : " + departmentId);
+			
 			// 추가
 			var token = $("meta[name='_csrf']").attr("content");
 	        var header = $("meta[name='_csrf_header']").attr("content");
@@ -104,14 +113,17 @@
 	            },
 	            data: {
 	                workStart: startTime,
-	                today: currentDate
+	                today: currentDate,
+	                employeeId: employeeId,
+	                companyId: companyId,
+	                departmentId: departmentId
 	            },
 	            success: function(data) {
 	                console.log(data);
 	            },
-	            error: function() {
-	                console.log("에러 발생");
-	            }
+				error:function(request, status, error){
+					console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+				}
 	        });
 			
 			// 새로고침 하면서 출근시간 표시하기
