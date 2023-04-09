@@ -68,7 +68,9 @@
                 <div class="mb-3">
                 	<div th:text="${#temporals.format(workLog.modifyDate, 'yyyy-MM-dd HH:mm')}"></div>
                 </div>
-                <a th:href = "@{/worklog/worklog_list}" class = "btn btn-primary"><button class="btn btn-primary" style="width: 70px;">목록</button></a>
+                <a th:href="@{/worklog}" class="btn btn-primary">
+       				<button type="button" class="btn btn-primary" style="width: 70px;">목록</button>
+    			</a>
                 <button class="btn btn-primary" id="updateBtn" style="float: right;">수정</button>
                 <button class="btn btn-primary" id="saveBtn" style="float: right;">저장</button>
                 <button class="btn btn-primary" id="cancelBtn" style="float: right;">취소</button>
@@ -79,6 +81,9 @@
     </main>
 </div>
 <script layout:fragment="script" type='text/javascript'>
+function goBack() {
+    window.history.back();
+}
 
 $(document).ready(function() {
     // 페이지가 로드되었을 때 실행되는 코드

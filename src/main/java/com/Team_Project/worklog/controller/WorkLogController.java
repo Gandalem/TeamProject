@@ -1,8 +1,13 @@
 package com.Team_Project.worklog.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,10 +20,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.Team_Project.cList.service.EmployeeService;
-import com.Team_Project.entity.Employee;
 import com.Team_Project.entity.Member;
 import com.Team_Project.entity.WorkLog;
 import com.Team_Project.member.service.MemberService;
@@ -37,18 +41,14 @@ public class WorkLogController {
 	private final WorkLogService workLogService;
 	private final MemberService memberSerivce;
 	private final WorkLogRepository workLogRepository;
-	private final EmployeeService employeeService;
 
-	
 	@GetMapping("")
-	public String WorkLog() {
+	public String WorkLogList(Model model ) {
+		List<WorkLog> workLogList = this.workLogService.getList();
+		model.addAttribute("workLogList", workLogList);
 		return "worklog/worklog_list";
 	}
 	
-	
-	
-	
-
 	@GetMapping("/worklog_create")
 	public String createWorkLog() {
 		return "worklog/worklog_create";
@@ -66,18 +66,18 @@ public class WorkLogController {
 	    return "redirect:/worklog";
 	}
 	
-//	@GetMapping("/worklog_list")
-//	public String WorkLogList(Model model ) {
-//		List<WorkLog> workLogList = this.workLogService.getList();
-//		model.addAttribute("workLogList", workLogList);
-//		return "worklog/worklog_list";
-//	}
 	
 	@GetMapping("/worklog_detail/{id}")
 	public String detail(Model model, @PathVariable("id") Long id) {
-		WorkLog workLog = this.workLogService.getWorkLog(id);
-		model.addAttribute("workLog", workLog);
-		return "/worklog/worklog_detail";
+	    WorkLog workLog = this.workLogService.getWorkLog(id);
+	    
+	    if (workLog == null) {
+	        // 오류 메시지를 설정하거나 다른 페이지로 리다이렉트하는 등의 처리를 수행합니다.
+	        return "redirect:/error";
+	    }
+	    
+	    model.addAttribute("workLog", workLog);
+	    return "/worklog/worklog_detail";
 	}
 	
 
@@ -108,32 +108,90 @@ public class WorkLogController {
 	    return mav;
 	}
 	
-	//유저 리스트 출력
-		@GetMapping("/userList")
-		@ResponseBody
-		public List<WorkLog> UserList(@RequestParam("company") Long companyId, @RequestParam("department") Long departmentId) {
-			return workLogService.UserList(companyId, departmentId);
-		}
-		
-		//조회 리스트
-		@GetMapping("/worklogList")
-		@ResponseBody
-		public List<WorkLog> emList(@RequestParam("company") Long companyId, @RequestParam("department") Long departmentId, @RequestParam("id") Long id) {
-			return workLogService.emList(companyId, departmentId, id);
-		}
-		
-		//전체 리스트
-		@GetMapping("/List")
-		@ResponseBody
-		public List<WorkLog> List() {
-			return workLogService.getList();
-		}
-		
+	// 유저 리스트 출력
+	@GetMapping("/userList")
+	@ResponseBody
+	public List<Member> UserList(@RequestParam("company") Long companyId,
+			@RequestParam("department") Long departmentId) {
+		return workLogService.UserList(companyId, departmentId);
+	}
+
+	// 조회 리스트
+	@GetMapping("/worklogList")
+	@ResponseBody
+	public Map<String, Object> emList(@RequestParam("company") Long companyId, @RequestParam("department") Long departmentId,
+	        @RequestParam("memberId") Long memberId) {
+	    List<WorkLog> workLogList = workLogService.emList(companyId, departmentId, memberId);
+	    List<WorkLogDTO> workLogDTOList = new ArrayList<>();
+
+	    for (WorkLog worklog : workLogList) {
+	        WorkLogDTO dto = new WorkLogDTO();
+	        dto.setMemberName(worklog.getMember().getName());
+	        dto.setTitle(worklog.getTitle());
+	        dto.setContent(worklog.getContent());
+	        dto.setCreateDate(worklog.getCreateDate().toString());
+	        workLogDTOList.add(dto);
+	    }
+
+	    Map<String, Object> resultMap = new HashMap<>();
+	    resultMap.put("data", workLogDTOList);
+	    return resultMap;
+	}
+
+
+
+
+	// 전체 리스트
+	@GetMapping("/List")
+	@ResponseBody
+	public List<WorkLogDTO> List() {
+	    List<WorkLog> workLogList = workLogService.getList();
+	    List<WorkLogDTO> workLogDTOList = new ArrayList<>();
+
+	    for (WorkLog worklog : workLogList) {
+	        WorkLogDTO dto = new WorkLogDTO();
+	        dto.setId(worklog.getId());
+	        dto.setMemberName(worklog.getMember().getName());
+	        dto.setTitle(worklog.getTitle());
+	        dto.setContent(worklog.getContent());
+	        dto.setCreateDate(worklog.getCreateDate().toString());
+	        workLogDTOList.add(dto);
+	    }
+
+	    return workLogDTOList;
+	}
+
+	
+	//근무일지 삭제
+	@DeleteMapping("/worklogDelete")
+	public ResponseEntity<Map<String, String>> worklogDelete(Principal principal, @RequestBody List<Long> workLogIds) {
+	    Map<String, String> response = new HashMap<>();
+	    try {
+	        for (Long workLogId : workLogIds) {
+	            WorkLog workLog = this.workLogService.getWorkLog(workLogId);
+	            if (!workLog.getMember().getName().equals(principal.getName())) {
+	                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
+	            }
+	            workLogRepository.deleteById(workLogId);
+	        }
+	        response.put("status", "success");
+	        return ResponseEntity.ok(response);
+	    } catch (Exception e) {
+	        response.put("status", "error");
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+	    }
+	}
+
+	
+
+	
+
+
 //		//근무일지 삭제
 //		@DeleteMapping("/worklogDelete")
 //		@ResponseBody
 //		public void employeeDelete(@RequestBody List<String> emailList) {
-//			this.workLogService.deleteEmployee(emailList);	
+//			this.workLogService.deleteWorkLog(emailList);	
 //		}
 
 }

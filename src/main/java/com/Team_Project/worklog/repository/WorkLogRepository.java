@@ -1,7 +1,6 @@
 package com.Team_Project.worklog.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -24,4 +23,7 @@ public interface WorkLogRepository extends JpaRepository<WorkLog, Long> {
 	//Optional<WorkLog> findByEmail(String email);
 
 	//void deleteByEmail(String email);
+	
+	List<WorkLog> findAllByCompanyAndDepartment(Long companyId, Long departmentId);
+    List<WorkLog> findAllByMember_IdAndCompanyAndDepartment(Long memberId, Long companyId, Long departmentId);
 }

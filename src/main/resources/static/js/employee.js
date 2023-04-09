@@ -198,7 +198,6 @@ $(document).ready(function() {
     });
 	
 	//사원 리스트 조회 버튼 
-	
 	$("#btnSearch").click(function(){
 		//조회 조건 값 저장
 		let companyId = $("#company option:selected").val();

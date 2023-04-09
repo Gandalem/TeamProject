@@ -7,6 +7,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.Team_Project.cList.repository.CListRepository;
+import com.Team_Project.cList.repository.DRepository;
+import com.Team_Project.entity.Company;
+import com.Team_Project.entity.Department;
 import com.Team_Project.entity.Member;
 import com.Team_Project.member.dto.MemberDTO;
 import com.Team_Project.member.repository.MemberRepository;
@@ -23,6 +27,8 @@ public class MemberService {
 	
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CListRepository companyRepository;
+    private final DRepository departmentRepository;
 
     public void register(Member member) {
         if (memberRepository.existsByEmail(member.getEmail())) {
@@ -100,6 +106,15 @@ public class MemberService {
              memberRepository.save(member1);
         }
     } 
+    
+    
+    public Company findCompanyById(Long companyId) {
+        return companyRepository.findById(companyId).orElseThrow(() -> new RuntimeException("Company not found."));
+    }
+
+    public Department findDepartmentById(Long departmentId) {
+        return departmentRepository.findById(departmentId).orElseThrow(() -> new RuntimeException("Department not found."));
+    }
     
 
     

@@ -6,12 +6,16 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.Team_Project.cList.repository.EmployeeRepository;
 import com.Team_Project.config.DataNotFoundException;
+import com.Team_Project.entity.Company;
+import com.Team_Project.entity.Department;
 import com.Team_Project.entity.Member;
 import com.Team_Project.entity.WorkLog;
+import com.Team_Project.member.repository.MemberRepository;
+import com.Team_Project.member.service.MemberService;
 import com.Team_Project.worklog.repository.WorkLogRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -19,6 +23,8 @@ import lombok.RequiredArgsConstructor;
 public class WorkLogService {
 	
 	private final WorkLogRepository workLogRepository;
+	private final MemberRepository memberRepository;
+	private final MemberService memberService;
 	
 	public List<WorkLog> getList(){
 		return workLogRepository.findAll();
@@ -51,22 +57,26 @@ public class WorkLogService {
     }
  
 	// select box 이름 호출
-	public List<WorkLog> UserList(Long companyId, Long departmentId) {
-		return workLogRepository.findByCompany_IdAndDepartment_Id(companyId, departmentId);
-	}
+//	public List<WorkLog> UserList(Long companyId, Long departmentId) {
+//		return workLogRepository.findByCompany_IdAndDepartment_Id(companyId, departmentId);
+//	}
 
 	// 조회 리스트
 	public List<WorkLog> emList(Long companyId, Long departmentId, Long id) {
 		return workLogRepository.findByCompany_IdAndDepartment_IdAndId(companyId, departmentId, id);
 	}
+	
+	public List<Member> UserList(Long companyId, Long departmentId) {
+	    Company company = memberService.findCompanyById(companyId);
+	    Department department = memberService.findDepartmentById(departmentId);
+	    // 이제 회사와 부서 객체를 사용하여 멤버를 조회하는 쿼리를 추가해야 합니다.
+	    return memberRepository.findByCompanyAndDepartment(company, department);
+	}
+	
 
-
-	// 근무일지 삭제
-//	@Transactional
-//	    public void deleteWorkLog(List<String> emailList) {
-//	        for (String email : emailList) {
-//	        	workLogRepository.deleteByEmail(email);
-//	        }
-//	}
+	public void deleteWorkLog(WorkLog workLog) {
+			workLogRepository.delete(workLog);
+		
+	}
 	
 }

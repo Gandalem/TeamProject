@@ -4,8 +4,11 @@ import lombok.Data;
 
 @Data
 public class WorkLogDTO {
-
-	private String title;
-	private String content;
 	
+	private Long id;
+	private String memberName;
+    private String title;
+    private String content;
+    private String createDate;
+
 }

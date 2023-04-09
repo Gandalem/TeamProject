@@ -10,6 +10,10 @@
     <link rel="stylesheet" type="text/css" href="css/common.css">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css"/>
+    <!-- Toastr -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    
     <script src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
     <title>근무일지 페이지</title>
@@ -55,62 +59,44 @@
                 <label style="margin-left: 100px;">회사명</label>
                 <select name="company" id="company" onchange="company();">
                     <option value="">선택</option>
-                    <!-- <option value="samsung">삼성</option>
-                    <option value="apple">애플</option> -->
                 </select>
                 <label>부서명</label>
                 <select name="department" id="department" onchange="department();">
                     <option value="">선택</option>
-                    <!-- <option value="management">경영팀</option>
-                    <option value="design">디자인팀</option>
-                    <option value="develop">개발팀</option> -->
                 </select>
-                <label>이름</label>
+                <label>이름</label> 
                 <select name="username" id="username">
-                    <option value="">선택</option>
-                    <!-- <option value="1">홍길동</option>
-                    <option value="2">이순신</option> -->
-                </select>
-                <button id="btnSearch" class="btn btn-primary" style="width: 70px; margin-left: 20px; margin-right: 100px;" disabled>조회</button>
+					<option value="">선택</option>
+				</select>
+
+				<button id="btnSearch" class="btn btn-primary" style="width: 70px; margin-left: 20px; margin-right: 100px;" disabled>조회</button>
                 <a th:href = "@{/worklog/worklog_create}" class = "btn btn-primary"><button class="btn btn-primary" style="width: 70px;">등록</button></a>
-                <button class="btn btn-warning" style="width: 70px;" disabled>삭제</button>
-                
-		<div class="row my-3">
-			<div class="col-6">
+                <button id="btnDelete" class="btn btn-warning" style="width: 70px;" disabled>삭제</button>
+				<div class="row my-3">
+					<div class="col-6">
+					</div>
+				</div>
+				<div class="table-responsive">
+					<table id="worklogTable" class="table table-bordered" style="float: left; width: 100%; text-align: center;">
+						<thead class="thead-light">
+					 		<tr>
+								<th style="min-width: 10px;" class="text-center"><input id="select_all" name="check" type="checkbox"></th>
+								<th style="min-width: 70px;" class="text-center">작성자</th>
+								<th style="min-width: 70px;" class="text-center">제목</th>
+								<th style="min-width: 70px;" class="text-center">내용</th>
+								<th style="min-width: 70px;" class="text-center">작성일</th>
+							</tr>
+						</thead>
+					</table>
+    			</div>
 			</div>
 		</div>
-	<table border="1" class="table">
-		<thead class="table-dark">
-			<!-- 제목을 처리 -->
-			<tr>
-				<th>작성자</th>
-				<th >제목</th>
-				<th style="width: 50%">내용</th>
-				<th>작성일</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr th:each="workLog : ${workLogList}">
-				<td><span th:if="${workLog.member != null}" th:text="${workLog.member.name}"></span></td>
-				<td><a th:href="@{|/worklog/worklog_detail/${workLog.id}|}" th:text="${workLog.title}"></a></td>
-				<td th:text="${workLog.content}"></td>
-				<td th:text="${#temporals.format(workLog.createDate, 'yyyy-MM-dd HH:mm')}"></td>
-			</tr>
-		</tbody>
-	</table>
-	<div class="table-responsive">
-                <table id="worklogTable" class="table table-bordered" style="float: left; width: 100%; text-align: center;">
-                    <thead class="thead-light">
-                        <tr>
-                            <th style="min-width: 10px;" class="text-center"><input id="select_all" name="check" type="checkbox"></th>
-                            <th style="min-width: 70px;" class="text-center">작성자</th>
-                            <th style="min-width: 70px;" class="text-center">제목</th>
-                            <th style="min-width: 70px;" class="text-center">내용</th>
-                            <th style="min-width: 70px;" class="text-center">작성일</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-	
-</div>
+    </main>
+    <footer>
+        <div class="footerForm">
+            <h1>footer</h1>
+        </div>
+    </footer>
+</body>
+<script src="js/wotklog.js"></script>
 </html>
